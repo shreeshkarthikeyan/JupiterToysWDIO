@@ -1,8 +1,12 @@
+import results from "../results.js";
 import CheckOutPage from "./checkout.js";
 
 class ConfirmOrderTab extends CheckOutPage {
 
     
+    constructor() {
+        super();
+    }
 
     public get btnSubmitOrder() {
         return this.activeTabContainer.$(".//button[.//text()='Submit Order']");
@@ -97,8 +101,9 @@ class ConfirmOrderTab extends CheckOutPage {
         await this.click(this.btnExpandAll);
     }
 
-    public async clickSubmitOrder() : Promise<void> {
+    public async clickSubmitOrder() : Promise<any> {
         await this.click(this.btnSubmitOrder);
+        return results;
     }
 }
 

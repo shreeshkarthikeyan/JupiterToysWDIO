@@ -1,8 +1,14 @@
 import { IContactDetails } from "../../model/contact.details.js";
 import CheckoutPage from "./checkout.js";
+//import deliveryDetailsForm from "./delivery.details.form.js";
 
 class ContactDetailsTab extends CheckoutPage {
 
+    
+    constructor() {
+        super();
+    }
+    
     public get inpFirstName() {
         return this.activeTabContainer.$(".//input[@ng-reflect-name='firstName']");
     }
@@ -40,15 +46,21 @@ class ContactDetailsTab extends CheckoutPage {
     }
 
     public async addContactDetails(contactDetails: IContactDetails) : Promise<void> {
-        this.enterValue(this.inpFirstName, contactDetails.firstname);
-        this.enterValue(this.inpLastName, contactDetails.lastname);
-        this.enterValue(this.inpEmail, contactDetails.email);
-        this.enterValue(this.inpPhoneNumber, contactDetails.phoneNumber);
-        this.enterValue(this.inpAddressLine1, contactDetails.addressline1);
-        this.enterValue(this.inpAddressLine2, contactDetails.addressline2);
-        this.enterValue(this.inpSuburb, contactDetails.suburb);
-        this.selectOption(this.selectState, contactDetails.state);
-        this.enterValue(this.inpPostcode, contactDetails.postcode);
+        await this.enterValue(this.inpFirstName, contactDetails.firstname);
+        await this.enterValue(this.inpLastName, contactDetails.lastname);
+        await this.enterValue(this.inpEmail, contactDetails.email);
+        await this.enterValue(this.inpPhoneNumber, contactDetails.phoneNumber);
+        await this.enterValue(this.inpAddressLine1, contactDetails.addressline1);
+        await this.enterValue(this.inpAddressLine2, contactDetails.addressline2);
+        await this.enterValue(this.inpSuburb, contactDetails.suburb);
+        await this.selectOption(this.selectState, contactDetails.state);
+        await this.enterValue(this.inpPostcode, contactDetails.postcode);
+    }
+
+    public async clickNext() :Promise<any> {
+        await super.clickNext();
+        await this.waitForActiveTabToBe("Delivery Details");
+        //return deliveryDetailsForm;
     }
 }
 

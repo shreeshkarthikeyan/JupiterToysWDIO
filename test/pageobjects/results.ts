@@ -1,6 +1,12 @@
 import Page from "./page.js"
 
 class ResultsPage extends Page {
+
+    
+    constructor() {
+        super();
+    }
+    
     public get lblPaymentStatus() {
         return $("//div[contains(@class,'alert')]//strong[1]");
     }

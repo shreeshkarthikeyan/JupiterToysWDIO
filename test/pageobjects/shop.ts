@@ -1,13 +1,11 @@
-import { $ } from '@wdio/globals'
 import Page from './page.js';
 
 class ShopPage extends Page {
-
+    
     constructor() {
         super();
-        //this.checkForVisibility(this.toysContainer);
     }
-    
+
     public get toysContainer() {
         return $(".products");
     }
@@ -22,7 +20,6 @@ class ShopPage extends Page {
         for(let i = 0 ; i < quantity; i++) {
             await this.click(await toyContainer.$(".//a[text()='Buy']"));
             await this.checkForVisibility(await $("//div[@class=\"cdk-overlay-container\"]"));
-            await browser.pause(2000);
         };
         return this;
     }

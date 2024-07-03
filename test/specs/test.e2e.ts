@@ -1,5 +1,4 @@
 import { expect } from '@wdio/globals'
-import commonNavigators from '../pageobjects/common.navigators.js'
 import shop from '../pageobjects/shop.js'
 import CartItems from '../data/CartItems.js'
 import cart from '../pageobjects/cart.js'
@@ -11,7 +10,7 @@ import { IPaymentDetails } from '../model/payment.details.js'
 import paymentDetailsForm from '../pageobjects/CheckOut/payment.details.form.js'
 import confirmOrderForm from '../pageobjects/CheckOut/confirm.order.form.js'
 import results from '../pageobjects/results.js'
-import Page from '../pageobjects/page.js'
+import contactDetailsForm from '../pageobjects/CheckOut/contact.details.form.js'
 
 describe('Jupiter Toys Web Application', () => {
     it('Different contact address and delivery address', async () => {
@@ -29,33 +28,30 @@ describe('Jupiter Toys Web Application', () => {
         );
 
 
-        await commonNavigators.open();
+        await shop.navigateToUrl();
         
-        await commonNavigators.clickShop();
+        let shopObj: any = await shop.clickShop();
     
         //toy purchasing:
-        await shop.addToy("Rubik's Cube", 2);
+        await shopObj.addToy("Rubik's Cube", 2);
         let toyPrice: number = await shop.getToyPrice("Rubik's Cube");
         let toySubTotal : number = toyPrice * 2;
         let totalPrice : number = toySubTotal;
         
-        await commonNavigators.clickCart();
+        await shop.clickCart();
 
         await expect(await cart.getToyQuantity("Rubik's Cube")).toBe(Number(2).toString());
         await expect(await cart.getToyPrice("Rubik's Cube")).toContain(toySubTotal.toString());
         await expect(await cart.getTotalPrice()).toContain(totalPrice.toString());
-        await cart.clickCheckout();
-        
-        await ContactDetailsForm.addContactDetails(contactDetails);
-        await browser.pause(1000);
-        await ContactDetailsForm.clickNext();
+        //let contactDetailsFormObj = await cartObj.clickCheckout();
+        cart.clickCheckout();
+        await contactDetailsForm.addContactDetails(contactDetails);
+        await contactDetailsForm.clickNext();
 
         await deliveryDetailsForm.addDeliveryDetails(deliveryDetails);
-        await browser.pause(1000);
         await deliveryDetailsForm.clickNext();
         
         await paymentDetailsForm.addPaymentDetails(paymentDetails);
-        await browser.pause(1000);
         await paymentDetailsForm.clickNext();
 
         await confirmOrderForm.clickExpandAll();
@@ -103,11 +99,11 @@ describe('Jupiter Toys Web Application', () => {
         await expect(await confirmOrderForm.getCardType()).toBe(paymentDetails.cardtype);
         await expect(await confirmOrderForm.getCardExpiry()).toBe(paymentDetails.expirydate);
         await expect(await confirmOrderForm.getCardCVV()).toBe(paymentDetails.cvv.toString());
-        browser.pause(5000);
-        await confirmOrderForm.clickSubmitOrder();
+        
+        let resultsObj = await confirmOrderForm.clickSubmitOrder();
 
-        console.log("Payment Status => " + await results.getPaymentStatus());
-        console.log("Order Number => " + await results.getPaymentStatus());
+        console.log("Payment Status => " + await resultsObj.getPaymentStatus());
+        console.log("Order Number => " + await resultsObj.getPaymentStatus());
 
     })
 /*    
@@ -151,7 +147,7 @@ describe('Jupiter Toys Web Application', () => {
             cvv : "123"
         }
 
-        await commonNavigators.open();
+        await commonNavigators.navigateToUrl();
         
         await commonNavigators.clickShop();
         

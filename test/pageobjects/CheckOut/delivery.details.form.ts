@@ -1,8 +1,13 @@
 import { IDeliveryDetails } from "../../model/delivery.details.js";
 import CheckOutPage from "./checkout.js";
+//import paymentDetailsForm from "./payment.details.form.js";
 
 class DeliveryDetailsTab extends CheckOutPage {
 
+    
+    constructor() {
+        super();
+    }
     public get isSameAsContactAddress() {
         return this.activeTabContainer.$(".//mat-radio-button[@value='Yes' and contains(@class,'mat-radio-button')]");
     }
@@ -39,20 +44,26 @@ class DeliveryDetailsTab extends CheckOutPage {
         if(deliveryDetails.isSameAsContactAddress) {
             let classValue = await (await this.isSameAsContactAddress).getAttribute("class");
             if(!(classValue.includes("mat-radio-checked"))) {
-                this.click(this.isSameAsContactAddress);
+                await this.click(this.isSameAsContactAddress);
             }
         }else {
             let classValue = await (await this.isNotSameAsContactAddress).getAttribute("class");
             if(!(classValue.includes("mat-radio-checked"))) {
-                this.click(this.isNotSameAsContactAddress);
+                await this.click(this.isNotSameAsContactAddress);
             } 
-            this.enterValue(this.inpName, deliveryDetails.name);
-            this.enterValue(this.inpAddressLine1, deliveryDetails.addressline1);
-            this.enterValue(this.inpAddressLine2, deliveryDetails.addressline2);
-            this.enterValue(this.inpSuburb, deliveryDetails.suburb);
-            this.selectOption(this.selectState, deliveryDetails.state);
-            this.enterValue(this.inpPostcode, deliveryDetails.postcode);
+            await this.enterValue(this.inpName, deliveryDetails.name);
+            await this.enterValue(this.inpAddressLine1, deliveryDetails.addressline1);
+            await this.enterValue(this.inpAddressLine2, deliveryDetails.addressline2);
+            await this.enterValue(this.inpSuburb, deliveryDetails.suburb);
+            await this.selectOption(this.selectState, deliveryDetails.state);
+            await this.enterValue(this.inpPostcode, deliveryDetails.postcode);
         }
+    }
+
+    public async clickNext(): Promise<any> {
+        await super.clickNext();
+        await this.waitForActiveTabToBe("Payment Details");
+        //return paymentDetailsForm;
     }
 }
 
