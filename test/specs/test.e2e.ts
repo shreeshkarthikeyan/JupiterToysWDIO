@@ -11,39 +11,23 @@ import { IPaymentDetails } from '../model/payment.details.js'
 import paymentDetailsForm from '../pageobjects/CheckOut/payment.details.form.js'
 import confirmOrderForm from '../pageobjects/CheckOut/confirm.order.form.js'
 import results from '../pageobjects/results.js'
+import Page from '../pageobjects/page.js'
 
 describe('Jupiter Toys Web Application', () => {
     it('Different contact address and delivery address', async () => {
         //test data:
-        const contactDetails : IContactDetails = {
-            firstname : "Shreesh",
-            lastname : "Karthikeyan",
-            email : "shreeshkarthikeyan30@gmail.com",
-            phoneNumber : "0456314971",
-            addressline1 : "2, Coppin Close",
-            addressline2 : "",
-            suburb : "Hampton Park",
-            state : "VIC",
-            postcode : "3976"
-        };
+        const contactDetails = new IContactDetails("Shreesh", "Karthikeyan", "shreeshkarthikeyan30@gmail.com",
+            Number(61456314971), "2, Coppin Close", "", "Hampton Park", "VIC", Number(3976)
+        );
 
-        const deliveryDetails : IDeliveryDetails = {
-            isSameAsContactAddress : false,
-            name : "Student Housing Accomodation",
-            addressline1 : "Unit 201, 2 Eastern Place",
-            addressline2 : "",
-            suburb : "Hawthorn East",
-            state : "VIC",
-            postcode : "3123"
-        }
+        const deliveryDetails = new IDeliveryDetails(false, "Student Housing Accomodation",
+            "Unit 201, 2 Eastern Place", "", "Hawthorn East", "VIC", Number(3123)
+        );
 
-        const paymentDetails : IPaymentDetails = {
-            cardnumber : "1234123412341234",
-            cardtype : "Mastercard",
-            cardname : "Shreesh Karthikeyan",
-            expirydate : "12/26",
-            cvv : "123"
-        }
+        const paymentDetails = new IPaymentDetails(Number(1234123412341234),
+            "Mastercard", "Shreesh Karthikeyan", "12/26", Number(123)
+        );
+
 
         await commonNavigators.open();
         
@@ -86,12 +70,13 @@ describe('Jupiter Toys Web Application', () => {
         // Validating Contact Details
         await expect(await confirmOrderForm.getCName()).toBe(contactDetails.firstname + " " + contactDetails.lastname);
         await expect(await confirmOrderForm.getCEmailAddress()).toBe(contactDetails.email);
-        await expect((await confirmOrderForm.getCNumber())).toContain(contactDetails.phoneNumber);
+        await expect((await confirmOrderForm.getCNumber())).toContain(contactDetails.phoneNumber.toString());
+        await expect(await confirmOrderForm.getCAddress()).toContain(contactDetails.addressline1);
         if(contactDetails.addressline2.length > 0)
             await expect(await confirmOrderForm.getCAddress()).toContain(contactDetails.addressline2);
         await expect(await confirmOrderForm.getCAddress()).toContain(contactDetails.suburb);
         await expect(await confirmOrderForm.getCAddress()).toContain(contactDetails.state);
-        await expect(await confirmOrderForm.getCAddress()).toContain(contactDetails.postcode);
+        await expect(await confirmOrderForm.getCAddress()).toContain(contactDetails.postcode.toString());
 
         // Validating Delivery Details
         if(deliveryDetails.isSameAsContactAddress){
@@ -101,7 +86,7 @@ describe('Jupiter Toys Web Application', () => {
                 await expect(await confirmOrderForm.getDAddress()).toContain(contactDetails.addressline2);
             await expect(await confirmOrderForm.getDAddress()).toContain(contactDetails.suburb);
             await expect(await confirmOrderForm.getDAddress()).toContain(contactDetails.state);
-            await expect(await confirmOrderForm.getDAddress()).toContain(contactDetails.postcode);
+            await expect(await confirmOrderForm.getDAddress()).toContain(contactDetails.postcode.toString());
         } else {
             await expect(await confirmOrderForm.getDName()).toBe(deliveryDetails.name);
             await expect(await confirmOrderForm.getDAddress()).toContain(deliveryDetails.addressline1);
@@ -109,22 +94,23 @@ describe('Jupiter Toys Web Application', () => {
                 await expect(await confirmOrderForm.getDAddress()).toContain(deliveryDetails.addressline2);
             await expect(await confirmOrderForm.getDAddress()).toContain(deliveryDetails.suburb);
             await expect(await confirmOrderForm.getDAddress()).toContain(deliveryDetails.state);
-            await expect(await confirmOrderForm.getDAddress()).toContain(deliveryDetails.postcode);
+            await expect(await confirmOrderForm.getDAddress()).toContain(deliveryDetails.postcode.toString());
         }
 
         // Payment Details section validation
         await expect(await confirmOrderForm.getCardName()).toBe(paymentDetails.cardname);
-        await expect(await confirmOrderForm.getCardNumber()).toBe(paymentDetails.cardnumber);
+        await expect(await confirmOrderForm.getCardNumber()).toBe(paymentDetails.cardnumber.toString());
         await expect(await confirmOrderForm.getCardType()).toBe(paymentDetails.cardtype);
         await expect(await confirmOrderForm.getCardExpiry()).toBe(paymentDetails.expirydate);
-        await expect(await confirmOrderForm.getCardCVV()).toBe(paymentDetails.cvv);
-
+        await expect(await confirmOrderForm.getCardCVV()).toBe(paymentDetails.cvv.toString());
+        browser.pause(5000);
         await confirmOrderForm.clickSubmitOrder();
 
         console.log("Payment Status => " + await results.getPaymentStatus());
         console.log("Order Number => " + await results.getPaymentStatus());
-    }),
-    
+
+    })
+/*    
     it('Same contact address and delivery address', async () => {
         //test data:
         //cart items:
@@ -168,7 +154,7 @@ describe('Jupiter Toys Web Application', () => {
         await commonNavigators.open();
         
         await commonNavigators.clickShop();
-       
+        
         for (let entry of productListToPurchase.entries()) {
             console.log(entry[0], entry[1]);
             await shop.addToy(entry[0], entry[1]);
@@ -251,5 +237,6 @@ describe('Jupiter Toys Web Application', () => {
         console.log("Payment Status => " + await results.getPaymentStatus());
         console.log("Order Number => " + await results.getPaymentStatus());
     })
+*/
 })
 

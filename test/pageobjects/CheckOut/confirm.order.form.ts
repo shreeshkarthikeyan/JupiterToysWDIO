@@ -2,6 +2,8 @@ import CheckOutPage from "./checkout.js";
 
 class ConfirmOrderTab extends CheckOutPage {
 
+    
+
     public get btnSubmitOrder() {
         return this.activeTabContainer.$(".//button[.//text()='Submit Order']");
     }

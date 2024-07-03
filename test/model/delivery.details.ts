@@ -1,9 +1,15 @@
-export interface IDeliveryDetails {
-    isSameAsContactAddress : boolean,
-    name : string,
-    addressline1 : string,
-    addressline2 : string,
-    suburb : string,
-    state : string,
-    postcode : string
+export class IDeliveryDetails {
+
+    constructor(
+        public isSameAsContactAddress : boolean,
+        public name : string,
+        public addressline1 : string,
+        public addressline2 : string,
+        public suburb : string,
+        public state : string,
+        public postcode : number ) {
+
+            if(!(postcode.toString().length === 4))
+                throw new Error("Invalid postcode");
+    }
 }

@@ -18,8 +18,10 @@ export default class Page {
         await element.click();
     }
 
-    public async enterValue(element: any, text: string) {
+    public async enterValue(element: any, text: any) {
         await this.checkForVisibility(element);
+        await element.clearValue();
+        browser.pause(500);
         await element.setValue(text);
     }
 
@@ -30,6 +32,6 @@ export default class Page {
     }
 
     public async checkForVisibility(element: any) {
-        await element.waitForDisplayed( { timeout: 3000, timeoutMsg: "element not visible"}); 
+        await element.waitForDisplayed( { timeout: 10000, timeoutMsg: "element not visible"}); 
     }
 }

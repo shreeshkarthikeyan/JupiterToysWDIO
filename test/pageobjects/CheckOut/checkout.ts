@@ -7,7 +7,7 @@ export default class CheckOutPage extends Page {
     }
 
     public get activeTabContainer() {
-        return this.pageContainer.$(".//div[contains(@style,'visibility: inherit;')]");
+        return this.pageContainer.$(".//div[@role=\"tabpanel\" and @aria-expanded=\"true\"]");
     }
 
     public get btnNext() {

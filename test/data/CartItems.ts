@@ -1,6 +1,6 @@
 import { Toy } from "../model/toy.js";
 
-export default class ClassItems {
+export default class CartItems {
     public static cartItems: Map<string, Toy> = new Map<string, Toy>();
 
 
