@@ -30,21 +30,21 @@ describe('Jupiter Toys Web Application', () => {
 
         await shop.navigateToUrl();
         
-        let shopObj: any = await shop.clickShop();
+        let shopObj = await shop.clickShop();
     
         //toy purchasing:
         await shopObj.addToy("Rubik's Cube", 2);
-        let toyPrice: number = await shop.getToyPrice("Rubik's Cube");
+        let toyPrice: number = await shopObj.getToyPrice("Rubik's Cube");
         let toySubTotal : number = toyPrice * 2;
         let totalPrice : number = toySubTotal;
         
-        await shop.clickCart();
+        await shopObj.clickCart();
 
         await expect(await cart.getToyQuantity("Rubik's Cube")).toBe(Number(2).toString());
         await expect(await cart.getToyPrice("Rubik's Cube")).toContain(toySubTotal.toString());
         await expect(await cart.getTotalPrice()).toContain(totalPrice.toString());
-        //let contactDetailsFormObj = await cartObj.clickCheckout();
         cart.clickCheckout();
+
         await contactDetailsForm.addContactDetails(contactDetails);
         await contactDetailsForm.clickNext();
 
@@ -170,15 +170,12 @@ describe('Jupiter Toys Web Application', () => {
         await cart.clickCheckout();
         
         await ContactDetailsForm.addContactDetails(contactDetails);
-        await browser.pause(1000);
         await ContactDetailsForm.clickNext();
 
         await deliveryDetailsForm.addDeliveryDetails(deliveryDetails);
-        await browser.pause(1000);
         await deliveryDetailsForm.clickNext();
         
         await paymentDetailsForm.addPaymentDetails(paymentDetails);
-        await browser.pause(1000);
         await paymentDetailsForm.clickNext();
 
         await confirmOrderForm.clickExpandAll();
