@@ -1,4 +1,4 @@
-export class IDeliveryDetails {
+export class DeliveryDetails {
 
     constructor(
         public isSameAsContactAddress : boolean,

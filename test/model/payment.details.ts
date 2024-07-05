@@ -1,4 +1,4 @@
-export class IPaymentDetails {
+export class PaymentDetails {
 
     constructor (
         public cardnumber : number,

@@ -1,4 +1,4 @@
-export class IContactDetails {
+export class ContactDetails {
 
     constructor ( 
         public firstname : string, 

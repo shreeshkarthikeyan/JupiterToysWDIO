@@ -61,7 +61,7 @@ export default class Page {
         return shop;
     }
 
-    public async clickCart () {
+    public async clickCart() {
         await this.click(this.btnCart);
         //return cart;
     }

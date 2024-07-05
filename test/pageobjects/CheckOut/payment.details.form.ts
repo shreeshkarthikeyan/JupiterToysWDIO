@@ -1,6 +1,6 @@
-import { IPaymentDetails } from "../../model/payment.details.js";
+import { PaymentDetails } from "../../model/payment.details.js";
 import CheckOutPage from "./checkout.js";
-//import confirmOrderForm from "./confirm.order.form.js";
+import confirmOrderForm from "./confirm.order.form.js";
 
 class PaymentDetailsTab extends CheckOutPage {
 
@@ -28,7 +28,7 @@ class PaymentDetailsTab extends CheckOutPage {
         return this.activeTabContainer.$(".//input[@ng-reflect-name='creditcardcvv']");
     }
 
-    public async addPaymentDetails(paymentDetails: IPaymentDetails) : Promise<void> {
+    public async addPaymentDetails(paymentDetails: PaymentDetails) : Promise<void> {
         await this.enterValue(this.inpCreditCardNumber, paymentDetails.cardnumber);
         await this.selectOption(this.selectCreditCardType, paymentDetails.cardtype);
         await this.enterValue(this.inpCreditCardName, paymentDetails.cardname);
@@ -39,7 +39,7 @@ class PaymentDetailsTab extends CheckOutPage {
     public async clickNext(): Promise<any> {
         await super.clickNext();
         await this.waitForActiveTabToBe("Confirm Order");
-        //return confirmOrderForm;
+        return confirmOrderForm;
     }
 }
 

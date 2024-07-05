@@ -38,7 +38,13 @@ class ShopPage extends Page {
         return this;
     }
 
-    public async getToyPrice(toy: string): Promise<any> {
+    /*public async getToyPrice(toy: string): Promise<any> {
+        let toyContainer = await this.toyContainer(toy);
+        let price = (await (await toyContainer?.$(".//span[contains(@class,'product-price')]"))?.getText())?.trim().replace("$","");
+        return price;
+    }*/
+
+    public getToyPrice = async (toy : string) : Promise<any> => {
         let toyContainer = await this.toyContainer(toy);
         let price = (await (await toyContainer?.$(".//span[contains(@class,'product-price')]"))?.getText())?.trim().replace("$","");
         return price;

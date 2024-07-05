@@ -1,4 +1,4 @@
-//import contactDetailsForm from "./CheckOut/contact.details.form.js";
+import contactDetailsForm from "./CheckOut/contact.details.form.js";
 import Page from "./page.js";
 
 class CartPage extends Page {
@@ -47,7 +47,7 @@ class CartPage extends Page {
 
     public async clickCheckout() {
         await this.click(this.btnCheckOut);
-        //return contactDetailsForm;
+        return contactDetailsForm;
     }
 }
 

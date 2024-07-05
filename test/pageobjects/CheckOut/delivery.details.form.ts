@@ -1,6 +1,6 @@
-import { IDeliveryDetails } from "../../model/delivery.details.js";
+import { DeliveryDetails } from "../../model/delivery.details.js";
 import CheckOutPage from "./checkout.js";
-//import paymentDetailsForm from "./payment.details.form.js";
+import paymentDetailsForm from "./payment.details.form.js";
 
 class DeliveryDetailsTab extends CheckOutPage {
 
@@ -40,7 +40,7 @@ class DeliveryDetailsTab extends CheckOutPage {
         return this.activeTabContainer.$(".//input[@ng-reflect-name='postcode']");
     }
 
-    public async addDeliveryDetails(deliveryDetails: IDeliveryDetails) : Promise<void> {
+    public async addDeliveryDetails(deliveryDetails: DeliveryDetails) : Promise<void> {
         if(deliveryDetails.isSameAsContactAddress) {
             let classValue = await (await this.isSameAsContactAddress).getAttribute("class");
             if(!(classValue.includes("mat-radio-checked"))) {
@@ -63,7 +63,7 @@ class DeliveryDetailsTab extends CheckOutPage {
     public async clickNext(): Promise<any> {
         await super.clickNext();
         await this.waitForActiveTabToBe("Payment Details");
-        //return paymentDetailsForm;
+        return paymentDetailsForm;
     }
 }
 
