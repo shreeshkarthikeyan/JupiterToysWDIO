@@ -1,5 +1,5 @@
-import contactDetailsForm from "./CheckOut/contact.details.form.js";
-import Page from "./page.js";
+import contactDetailsForm from "./CheckOut/ContactDetailsTab.js";
+import Page from "./BasePage.js";
 
 class CartPage extends Page {
     

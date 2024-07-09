@@ -1,5 +1,5 @@
-import results from "../results.js";
-import CheckOutPage from "./checkout.js";
+import results from "../ResultsPage.js";
+import CheckOutPage from "./CheckoutPage.js";
 
 class ConfirmOrderTab extends CheckOutPage {
 

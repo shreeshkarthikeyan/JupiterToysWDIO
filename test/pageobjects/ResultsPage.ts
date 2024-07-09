@@ -1,4 +1,4 @@
-import Page from "./page.js"
+import Page from "./BasePage.js"
 
 class ResultsPage extends Page {
 

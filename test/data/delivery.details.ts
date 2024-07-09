@@ -7,9 +7,6 @@ export class DeliveryDetails {
         public addressline2 : string,
         public suburb : string,
         public state : string,
-        public postcode : number ) {
-
-            if(!(postcode.toString().length === 4))
-                throw new Error("Invalid postcode");
-    }
+        public postcode : number 
+    ) {}
 }

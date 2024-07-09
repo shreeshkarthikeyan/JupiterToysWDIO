@@ -1,10 +1,10 @@
 import { expect } from '@wdio/globals'
-import shop from '../pageobjects/shop.js'
+import shop from '../pageobjects/ShopPage.js'
 import CartItems from '../data/CartItems.js'
-import cart from '../pageobjects/cart.js'
-import { ContactDetails } from '../model/contact.details.js'
-import { DeliveryDetails } from '../model/delivery.details.js'
-import { PaymentDetails } from '../model/payment.details.js'
+import cart from '../pageobjects/CartPage.js'
+import { ContactDetails } from '../data/contact.details.js'
+import { DeliveryDetails } from '../data/delivery.details.js'
+import { PaymentDetails } from '../data/payment.details.js'
 
 describe('Jupiter Toys Web Application', () => {
     it('Different contact address and delivery address', async () => {

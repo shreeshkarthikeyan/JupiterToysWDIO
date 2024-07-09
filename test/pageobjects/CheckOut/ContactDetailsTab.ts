@@ -1,10 +1,8 @@
-import { ContactDetails } from "../../model/contact.details.js";
-import CheckoutPage from "./checkout.js";
-import deliveryDetailsForm from "./delivery.details.form.js";
+import { ContactDetails } from "../../data/contact.details.js";
+import CheckoutPage from "./CheckoutPage.js";
+import deliveryDetailsForm from "./DeliveryDetailsTab.js";
 
 class ContactDetailsTab extends CheckoutPage {
-
-    
     constructor() {
         super();
     }

@@ -1,6 +1,6 @@
 import { browser } from '@wdio/globals'
 import { $ } from '@wdio/globals'
-import shop from './shop.js';
+import shop from './ShopPage.js';
 //import cart from './cart.js';
 
 /**

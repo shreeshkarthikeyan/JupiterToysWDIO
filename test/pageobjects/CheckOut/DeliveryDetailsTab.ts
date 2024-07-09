@@ -1,6 +1,6 @@
-import { DeliveryDetails } from "../../model/delivery.details.js";
-import CheckOutPage from "./checkout.js";
-import paymentDetailsForm from "./payment.details.form.js";
+import { DeliveryDetails } from "../../data/delivery.details.js";
+import CheckOutPage from "./CheckoutPage.js";
+import paymentDetailsForm from "./PaymentDetailsTab.js";
 
 class DeliveryDetailsTab extends CheckOutPage {
 
