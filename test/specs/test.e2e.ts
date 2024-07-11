@@ -1,7 +1,7 @@
 import { expect } from '@wdio/globals'
 import shop from '../pageobjects/ShopPage.js'
 import CartItems from '../data/CartItems.js'
-import cart from '../pageobjects/CartPage.js'
+import CartPage from '../pageobjects/CartPage.js'
 import { ContactDetails } from '../data/contact.details.js'
 import { DeliveryDetails } from '../data/delivery.details.js'
 import { PaymentDetails } from '../data/payment.details.js'
@@ -24,81 +24,81 @@ describe('Jupiter Toys Web Application', () => {
 
         await shop.navigateToUrl();
         
-        let shopObj = await shop.clickShop();
+        let shopPage = await shop.clickShop();
     
         //toy purchasing:
-        await shopObj.addToy("Rubik's Cube", 2);
-        let toyPrice: number = await shopObj.getToyPrice("Rubik's Cube");
+        await shopPage.addToy("Rubik's Cube", 2);
+        let toyPrice: number = await shopPage.getToyPrice("Rubik's Cube");
         let toySubTotal : number = toyPrice * 2;
         let totalPrice : number = toySubTotal;
         
-        await shopObj.clickCart();
+        await shopPage.clickCart();
 
-        await expect(await cart.getToyQuantity("Rubik's Cube")).toBe(Number(2).toString());
-        await expect(await cart.getToyPrice("Rubik's Cube")).toContain(toySubTotal.toString());
-        await expect(await cart.getTotalPrice()).toContain(totalPrice.toString());
+        await expect(await CartPage.getToyQuantity("Rubik's Cube")).toBe(Number(2).toString());
+        await expect(await CartPage.getToyPrice("Rubik's Cube")).toContain(toySubTotal.toString());
+        await expect(await CartPage.getTotalPrice()).toContain(totalPrice.toString());
         
-        let contactDetailsFormObj = await cart.clickCheckout();
+        let contactDetailsTab = await CartPage.clickCheckout();
 
-        await contactDetailsFormObj.addContactDetails(contactDetails);
-        let deliveryDetailsFormObj = await contactDetailsFormObj.clickNext();
+        await contactDetailsTab.addContactDetails(contactDetails);
+        let deliveryDetailsTab = await contactDetailsTab.clickNext();
 
-        await deliveryDetailsFormObj.addDeliveryDetails(deliveryDetails);
-        let paymentDetailsFormObj = await deliveryDetailsFormObj.clickNext();
+        await deliveryDetailsTab.addDeliveryDetails(deliveryDetails);
+        let paymentDetailsTab = await deliveryDetailsTab.clickNext();
         
-        await paymentDetailsFormObj.addPaymentDetails(paymentDetails);
-        let confirmOrderFormObj = await paymentDetailsFormObj.clickNext();
+        await paymentDetailsTab.addPaymentDetails(paymentDetails);
+        let confirmOrderTab = await paymentDetailsTab.clickNext();
 
-        await confirmOrderFormObj.clickExpandAll();
+        await confirmOrderTab.clickExpandAll();
         
         // Order Details section validation
-        await expect(await confirmOrderFormObj.getNumberOfCartItems()).toBe(Number(1));
-        await expect(await confirmOrderFormObj.getCartItemUnitPrice("Rubik's Cube")).toContain(toyPrice.toString());
-        await expect(await confirmOrderFormObj.getCartItemQuantity("Rubik's Cube")).toBe(Number(2).toString());
-        await expect(await confirmOrderFormObj.getCartItemSubTotal("Rubik's Cube")).toContain(toySubTotal.toString());
+        await expect(await confirmOrderTab.getNumberOfCartItems()).toBe(Number(1));
+        await expect(await confirmOrderTab.getCartItemUnitPrice("Rubik's Cube")).toContain(toyPrice.toString());
+        await expect(await confirmOrderTab.getCartItemQuantity("Rubik's Cube")).toBe(Number(2).toString());
+        await expect(await confirmOrderTab.getCartItemSubTotal("Rubik's Cube")).toContain(toySubTotal.toString());
 
         // Delivery & Contact Details section validation
         // Validating Contact Details
-        await expect(await confirmOrderFormObj.getCName()).toBe(contactDetails.firstname + " " + contactDetails.lastname);
-        await expect(await confirmOrderFormObj.getCEmailAddress()).toBe(contactDetails.email);
-        await expect((await confirmOrderFormObj.getCNumber())).toContain(contactDetails.phoneNumber.toString());
-        await expect(await confirmOrderFormObj.getCAddress()).toContain(contactDetails.addressline1);
+        await expect(await confirmOrderTab.getCName()).toBe(contactDetails.firstname + " " + contactDetails.lastname);
+        await expect(await confirmOrderTab.getCEmailAddress()).toBe(contactDetails.email);
+        await expect((await confirmOrderTab.getCNumber())).toContain(contactDetails.phoneNumber.toString());
+        await expect(await confirmOrderTab.getCAddress()).toContain(contactDetails.addressline1);
         if(contactDetails.addressline2.length > 0)
-            await expect(await confirmOrderFormObj.getCAddress()).toContain(contactDetails.addressline2);
-        await expect(await confirmOrderFormObj.getCAddress()).toContain(contactDetails.suburb);
-        await expect(await confirmOrderFormObj.getCAddress()).toContain(contactDetails.state);
-        await expect(await confirmOrderFormObj.getCAddress()).toContain(contactDetails.postcode.toString());
+            await expect(await confirmOrderTab.getCAddress()).toContain(contactDetails.addressline2);
+        await expect(await confirmOrderTab.getCAddress()).toContain(contactDetails.suburb);
+        await expect(await confirmOrderTab.getCAddress()).toContain(contactDetails.state);
+        await expect(await confirmOrderTab.getCAddress()).toContain(contactDetails.postcode.toString());
 
         // Validating Delivery Details
         if(deliveryDetails.isSameAsContactAddress){
-            await expect(await confirmOrderFormObj.getDName()).toBe(contactDetails.firstname + " " + contactDetails.lastname);
-            await expect(await confirmOrderFormObj.getDAddress()).toContain(contactDetails.addressline1);
+            await expect(await confirmOrderTab.getDName()).toBe(contactDetails.firstname + " " + contactDetails.lastname);
+            await expect(await confirmOrderTab.getDAddress()).toContain(contactDetails.addressline1);
             if(contactDetails.addressline2.length > 0)
-                await expect(await confirmOrderFormObj.getDAddress()).toContain(contactDetails.addressline2);
-            await expect(await confirmOrderFormObj.getDAddress()).toContain(contactDetails.suburb);
-            await expect(await confirmOrderFormObj.getDAddress()).toContain(contactDetails.state);
-            await expect(await confirmOrderFormObj.getDAddress()).toContain(contactDetails.postcode.toString());
+                await expect(await confirmOrderTab.getDAddress()).toContain(contactDetails.addressline2);
+            await expect(await confirmOrderTab.getDAddress()).toContain(contactDetails.suburb);
+            await expect(await confirmOrderTab.getDAddress()).toContain(contactDetails.state);
+            await expect(await confirmOrderTab.getDAddress()).toContain(contactDetails.postcode.toString());
         } else {
-            await expect(await confirmOrderFormObj.getDName()).toBe(deliveryDetails.name);
-            await expect(await confirmOrderFormObj.getDAddress()).toContain(deliveryDetails.addressline1);
+            await expect(await confirmOrderTab.getDName()).toBe(deliveryDetails.name);
+            await expect(await confirmOrderTab.getDAddress()).toContain(deliveryDetails.addressline1);
             if(contactDetails.addressline2.length > 0)
-                await expect(await confirmOrderFormObj.getDAddress()).toContain(deliveryDetails.addressline2);
-            await expect(await confirmOrderFormObj.getDAddress()).toContain(deliveryDetails.suburb);
-            await expect(await confirmOrderFormObj.getDAddress()).toContain(deliveryDetails.state);
-            await expect(await confirmOrderFormObj.getDAddress()).toContain(deliveryDetails.postcode.toString());
+                await expect(await confirmOrderTab.getDAddress()).toContain(deliveryDetails.addressline2);
+            await expect(await confirmOrderTab.getDAddress()).toContain(deliveryDetails.suburb);
+            await expect(await confirmOrderTab.getDAddress()).toContain(deliveryDetails.state);
+            await expect(await confirmOrderTab.getDAddress()).toContain(deliveryDetails.postcode.toString());
         }
 
         // Payment Details section validation
-        await expect(await confirmOrderFormObj.getCardName()).toBe(paymentDetails.cardname);
-        await expect(await confirmOrderFormObj.getCardNumber()).toBe(paymentDetails.cardnumber.toString());
-        await expect(await confirmOrderFormObj.getCardType()).toBe(paymentDetails.cardtype);
-        await expect(await confirmOrderFormObj.getCardExpiry()).toBe(paymentDetails.expirydate);
-        await expect(await confirmOrderFormObj.getCardCVV()).toBe(paymentDetails.cvv.toString());
+        await expect(await confirmOrderTab.getCardName()).toBe(paymentDetails.cardname);
+        await expect(await confirmOrderTab.getCardNumber()).toBe(paymentDetails.cardnumber.toString());
+        await expect(await confirmOrderTab.getCardType()).toBe(paymentDetails.cardtype);
+        await expect(await confirmOrderTab.getCardExpiry()).toBe(paymentDetails.expirydate);
+        await expect(await confirmOrderTab.getCardCVV()).toBe(paymentDetails.cvv.toString());
         
-        let resultsObj = await confirmOrderFormObj.clickSubmitOrder();
+        let resultsPage = await confirmOrderTab.clickSubmitOrder();
 
-        console.log("Payment Status => " + await resultsObj.getPaymentStatus());
-        console.log("Order Number => " + await resultsObj.getPaymentStatus());
+        console.log("Payment Status => " + await resultsPage.getPaymentStatus());
+        console.log("Order Number => " + await resultsPage.getPaymentStatus());
 
     })
 /*    
