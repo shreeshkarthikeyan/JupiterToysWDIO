@@ -11,8 +11,6 @@ class ShopPage extends Page {
     }
 
     public async toyContainer(toy: string){
-        //await this.checkForVisibility( await (await this.toysContainer).$("//h4[text()=\"" + toy + "\"]/.."));
-        //return await (await this.toysContainer).$("//h4[text()=\"" + toy + "\"]/..");
         await this.checkForVisibility(await this.toysContainer);
         const toysContainer  = await (await this.toysContainer).$$(".//li[contains(@class,\"product\")]");
         console.log("Toys items present in the page: " + toysContainer.length);
@@ -37,12 +35,6 @@ class ShopPage extends Page {
         };
         return this;
     }
-
-    /*public async getToyPrice(toy: string): Promise<any> {
-        let toyContainer = await this.toyContainer(toy);
-        let price = (await (await toyContainer?.$(".//span[contains(@class,'product-price')]"))?.getText())?.trim().replace("$","");
-        return price;
-    }*/
 
     public getToyPrice = async (toy : string) : Promise<any> => {
         let toyContainer = await this.toyContainer(toy);
