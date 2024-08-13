@@ -7,6 +7,7 @@ import { PaymentDetails } from '../data/payment.details.js'
 import { Toy } from '../data/toy.js'
 
 describe('Jupiter Toys Web Application', () => {
+
     it('Different contact address and delivery address', async () => {
 
         const toy1 = new Toy("Rubik's Cube", 2);
@@ -104,7 +105,8 @@ describe('Jupiter Toys Web Application', () => {
         console.log("Payment Status => " + await resultsPage.getPaymentStatus());
         console.log("Order Number => " + await resultsPage.getPaymentStatus());
 
-    }),  
+    }),
+
     it('Same contact address and delivery address', async () => {
         //test data:
 
@@ -143,10 +145,7 @@ describe('Jupiter Toys Web Application', () => {
         
         console.log(toysList);
 
-        let toy1SubTotal : number = (toy1.price === undefined ? Number(0) : Number(toy1.price)) * toy1.quantity;
-        let toy2SubTotal : number = (toy2.price === undefined ? Number(0) : Number(toy2.price)) * toy2.quantity;
-        let totalPrice : number = toy1SubTotal + toy2SubTotal;
-        
+        let totalPrice = toysList.reduce((accumulator, current) => accumulator + (current.price === undefined ? Number(0) : Number(current.price)) * current.quantity, 0);
         await shopPage.clickCart();
 
         for (var i in toysList) {
