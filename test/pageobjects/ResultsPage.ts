@@ -12,7 +12,7 @@ class ResultsPage extends Page {
     }
 
     public get lblOrderNumber() {
-        return $("//div[contains(@class,'alert')]//strong[1]");
+        return $("//div[contains(@class,'alert')]//strong[2]");
     }
 
     public async getPaymentStatus() : Promise<string> {

@@ -7,7 +7,6 @@ import { PaymentDetails } from '../data/payment.details.js'
 import { Toy } from '../data/toy.js'
 
 describe('Jupiter Toys Web Application', () => {
-
     it('Different contact address and delivery address', async () => {
 
         const toy1 = new Toy("Rubik's Cube", 2);
@@ -40,7 +39,7 @@ describe('Jupiter Toys Web Application', () => {
         await shopPage.clickCart();
 
         await expect(await CartPage.getToyQuantity(toy1.toyName)).toBe(Number(2).toString());
-        await expect(await CartPage.getToyPrice(toy1.toyName)).toContain(toySubTotal.toString());
+        await expect(await CartPage.getToySubTotal(toy1.toyName)).toContain(toySubTotal.toString());
         await expect(await CartPage.getTotalPrice()).toContain(totalPrice.toString());
         
         let contactDetailsTab = await CartPage.clickCheckout();
@@ -105,12 +104,18 @@ describe('Jupiter Toys Web Application', () => {
         console.log("Payment Status => " + await resultsPage.getPaymentStatus());
         console.log("Order Number => " + await resultsPage.getPaymentStatus());
 
-    }),
-   
+    }),  
     it('Same contact address and delivery address', async () => {
         //test data:
 
         const toy1 = new Toy("Rubik's Cube", 2);
+
+        const toy2 = new Toy("Peppa pig", 3);
+
+        const toysList : Toy[] = [
+            toy1,
+            toy2
+        ];
 
         //test data:
         const contactDetails = new ContactDetails("Shreesh", "Karthikeyan", "shreeshkarthikeyan30@gmail.com",
@@ -128,17 +133,28 @@ describe('Jupiter Toys Web Application', () => {
         await shop.navigateToUrl();
         
         let shopPage = await shop.clickShop();
+
+        for (var i in toysList) {
+            console.log("Toy's name: " + toysList[i].toyName + " , Quantity: "+toysList[i].quantity);
+            await shopPage.addToy(toysList[i].toyName, toysList[i].quantity);
+            let toyPrice: number = await shopPage.getToyPrice(toysList[i].toyName);
+            toysList[i].price = toyPrice;
+        }
         
-        await shopPage.addToy(toy1.toyName, toy1.quantity);
-        let toyPrice: number = await shopPage.getToyPrice(toy1.toyName);
-        toy1.price = toyPrice;
-        let toySubTotal : number = toy1.price * toy1.quantity;
-        let totalPrice : number = toySubTotal;
+        console.log(toysList);
+
+        let toy1SubTotal : number = (toy1.price === undefined ? Number(0) : Number(toy1.price)) * toy1.quantity;
+        let toy2SubTotal : number = (toy2.price === undefined ? Number(0) : Number(toy2.price)) * toy2.quantity;
+        let totalPrice : number = toy1SubTotal + toy2SubTotal;
         
         await shopPage.clickCart();
 
-        await expect(await CartPage.getToyQuantity(toy1.toyName)).toBe(Number(2).toString());
-        await expect(await CartPage.getToyPrice(toy1.toyName)).toContain(toySubTotal.toString());
+        for (var i in toysList) {
+            let toySubTotal : number = (toysList[i].price === undefined ? Number(0) : Number(toysList[i].price)) * toysList[i].quantity;
+            await expect(await CartPage.getToyQuantity(toysList[i].toyName)).toBe(toysList[i].quantity.toString());
+            await expect(await CartPage.getToySubTotal(toysList[i].toyName)).toContain(toySubTotal.toString());
+        }
+
         await expect(await CartPage.getTotalPrice()).toContain(totalPrice.toString());
         let contactDetailsTab = await CartPage.clickCheckout();
 
@@ -154,11 +170,13 @@ describe('Jupiter Toys Web Application', () => {
         await confirmOrderTab.clickExpandAll();
         
         // Order Details section validation
-        await expect(await confirmOrderTab.getNumberOfCartItems()).toBe(Number(1));
-        await expect(await confirmOrderTab.getCartItemUnitPrice(toy1.toyName)).toContain(toyPrice.toString());
-        await expect(await confirmOrderTab.getCartItemQuantity(toy1.toyName)).toBe(Number(2).toString());
-        await expect(await confirmOrderTab.getCartItemSubTotal(toy1.toyName)).toContain(toySubTotal.toString());
-
+        await expect(await confirmOrderTab.getNumberOfCartItems()).toBe(toysList.length);
+        for (var i in toysList) {
+            let toySubTotal : number = (toysList[i].price === undefined ? Number(0) : Number(toysList[i].price)) * toysList[i].quantity;
+            await expect(await confirmOrderTab.getCartItemUnitPrice(toysList[i].toyName)).toContain(toysList[i].price?.toString());
+            await expect(await confirmOrderTab.getCartItemQuantity(toysList[i].toyName)).toBe(toysList[i].quantity.toString());
+            await expect(await confirmOrderTab.getCartItemSubTotal(toysList[i].toyName)).toContain(toySubTotal.toString());
+        }
 
         // Delivery & Contact Details section validation
         // Validating Contact Details
@@ -201,8 +219,7 @@ describe('Jupiter Toys Web Application', () => {
         let resultsPage = await confirmOrderTab.clickSubmitOrder();
 
         console.log("Payment Status => " + await resultsPage.getPaymentStatus());
-        console.log("Order Number => " + await resultsPage.getPaymentStatus());
+        console.log("Order Number => " + await resultsPage.getOrderNumber());
     })
-
-})
+});
 

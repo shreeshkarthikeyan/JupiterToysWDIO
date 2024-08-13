@@ -34,7 +34,7 @@ class CartPage extends Page {
         return await (await (await toyRowContainer).$("<input>")).getAttribute("ng-reflect-value");
     }
 
-    public async getToyPrice(toyName: string) : Promise<string> {
+    public async getToySubTotal(toyName: string) : Promise<string> {
         const toyRowContainer = this.toyRowContainer(toyName);
         console.log(toyName + "'s price : " + await (await (await toyRowContainer).$(".//td[4]")).getText());
         return await (await (await toyRowContainer).$(".//td[4]")).getText();
