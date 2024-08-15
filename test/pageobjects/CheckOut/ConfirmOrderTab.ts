@@ -18,22 +18,29 @@ class ConfirmOrderTab extends CheckOutPage {
 
     public async sectionContainer(sectionName : string) {
         await this.waitForActiveTabToBe("Confirm Order");
-        return await (await this.activeTabContainer).$(".//mat-panel-title[contains(text(),'" + sectionName + "')]/../../..");
+        //return await (await this.activeTabContainer).$(".//mat-panel-title[contains(text(),'" + sectionName + "')]/../../..");
+        return await (await this.activeTabContainer).$(".//mat-expansion-panel[.//mat-panel-title[contains(text(),'" + sectionName + "')]]");
+        
+    }
+
+    public async findToyRow(toyName : string) {
+        const sectionContainer = await this.sectionContainer("Order Details");
+        return await sectionContainer.$(".//table/tbody//tr//td[contains(text(),\"" + toyName + "\")]/..");     
     }
 
     public async getCartItemUnitPrice(toyName : string) : Promise<string> {
-        const sectionContainer = await this.sectionContainer("Order Details");
-        return await (await sectionContainer.$(".//table/tbody//tr//td[contains(text(),\"" + toyName + "\")]/..//td[2]")).getText();
+        const toyRowContainer = await this.findToyRow(toyName);
+        return await (await toyRowContainer.$(".//td[2]")).getText();
     }
 
     public async getCartItemQuantity(toyName : string) : Promise<string> {
-        const sectionContainer = await this.sectionContainer("Order Details");
-        return await (await sectionContainer.$(".//table/tbody//tr//td[contains(text(),\"" + toyName + "\")]/..//td[3]")).getText();
+        const toyRowContainer = await this.findToyRow(toyName);
+        return await (await toyRowContainer.$(".//td[3]")).getText();
     }
 
     public async getCartItemSubTotal(toyName : string) : Promise<string> {
-        const sectionContainer = await this.sectionContainer("Order Details");
-        return await (await sectionContainer.$(".//table/tbody//tr//td[contains(text(),\"" + toyName + "\")]/..//td[4]")).getText();
+        const toyRowContainer = await this.findToyRow(toyName);
+        return await (await toyRowContainer.$(".//td[4]")).getText();
     }
 
     public async getNumberOfCartItems() : Promise<number> {
@@ -43,32 +50,32 @@ class ConfirmOrderTab extends CheckOutPage {
         return await sectionContainer.$$(".//table/tbody//tr").length;
     }
 
-    public async getDName() : Promise<string> {
+    public async getDeliveryName() : Promise<string> {
         const sectionContainer = await this.sectionContainer("Delivery & Contact Details");
         return await(await sectionContainer.$(".//table//tr//td[contains(text(),'Name')][1]/following-sibling::td[1]")).getText();
     }
 
-    public async getCName() : Promise<string> {
+    public async getContactName() : Promise<string> {
         const sectionContainer = await this.sectionContainer("Delivery & Contact Details");
         return await(await sectionContainer.$(".//table//tr//td[contains(text(),'Name')][2]/following-sibling::td[1]")).getText();
     }
 
-    public async getDAddress() : Promise<string> {
+    public async getDeliveryAddress() : Promise<string> {
         const sectionContainer = await this.sectionContainer("Delivery & Contact Details");
         return await(await sectionContainer.$(".//table//tr//td[contains(text(),'Address')][1]/following-sibling::td[1]")).getText();
     }
 
-    public async getCAddress() : Promise<string> {
+    public async getContactAddress() : Promise<string> {
         const sectionContainer = await this.sectionContainer("Delivery & Contact Details");
         return await(await sectionContainer.$(".//table//tr//td[contains(text(),'Address')][2]/following-sibling::td[1]")).getText();
     }
 
-    public async getCEmailAddress() : Promise<string> {
+    public async getContactEmailAddress() : Promise<string> {
         const sectionContainer = await this.sectionContainer("Delivery & Contact Details");
         return await(await sectionContainer.$(".//table//tr//td[contains(text(),'Email')][1]/following-sibling::td[1]")).getText();
     }
 
-    public async getCNumber() : Promise<string> {
+    public async getContactNumber() : Promise<string> {
         const sectionContainer = await this.sectionContainer("Delivery & Contact Details");
         return await(await sectionContainer.$(".//table//tr//td[contains(text(),'Phone')][1]/following-sibling::td[1]")).getText();
     }

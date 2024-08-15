@@ -1,6 +1,5 @@
 import { DeliveryDetails } from "../../data/delivery.details.js";
 import CheckOutPage from "./CheckoutPage.js";
-import paymentDetailsForm from "./PaymentDetailsTab.js";
 
 class DeliveryDetailsTab extends CheckOutPage {
 
@@ -16,19 +15,19 @@ class DeliveryDetailsTab extends CheckOutPage {
         return this.activeTabContainer.$(".//mat-radio-button[@value='No' and contains(@class,'mat-radio-button')]");
     }
 
-    public get inpName() {
+    public get inputName() {
         return this.activeTabContainer.$(".//input[@ng-reflect-name='name']");
     }
 
-    public get inpAddressLine1() {
+    public get inputAddressLine1() {
         return this.activeTabContainer.$(".//input[@ng-reflect-name='addressline1']");
     }
 
-    public get inpAddressLine2() {
+    public get inputAddressLine2() {
         return this.activeTabContainer.$(".//input[@ng-reflect-name='addressline2']");
     }
 
-    public get inpSuburb() {
+    public get inputSuburb() {
         return this.activeTabContainer.$(".//input[@ng-reflect-name='suburb']");
     }
 
@@ -36,19 +35,19 @@ class DeliveryDetailsTab extends CheckOutPage {
         return this.activeTabContainer.$(".//mat-select[@ng-reflect-name='state']");
     }
 
-    public get inpPostcode() {
+    public get inputPostcode() {
         return this.activeTabContainer.$(".//input[@ng-reflect-name='postcode']");
     }
 
     public async addDeliveryDetails(deliveryDetails: DeliveryDetails) : Promise<void> {
         await this.waitForActiveTabToBe("Delivery Details");
         await this.click(this.isNotSameAsContactAddress);
-        await this.enterValue(this.inpName, deliveryDetails.name);
-        await this.enterValue(this.inpAddressLine1, deliveryDetails.addressline1);
-        await this.enterValue(this.inpAddressLine2, deliveryDetails.addressline2);
-        await this.enterValue(this.inpSuburb, deliveryDetails.suburb);
+        await this.enterValue(this.inputName, deliveryDetails.name);
+        await this.enterValue(this.inputAddressLine1, deliveryDetails.addressline1);
+        await this.enterValue(this.inputAddressLine2, deliveryDetails.addressline2);
+        await this.enterValue(this.inputSuburb, deliveryDetails.suburb);
         await this.selectOption(this.selectState, deliveryDetails.state);
-        await this.enterValue(this.inpPostcode, deliveryDetails.postcode);
+        await this.enterValue(this.inputPostcode, deliveryDetails.postcode);
     }
 
     public async selectSameAsContactAddress() {

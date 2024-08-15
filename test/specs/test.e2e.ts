@@ -65,24 +65,24 @@ describe('Jupiter Toys Web Application', () => {
 
         // Delivery & Contact Details section validation
         // Validating Contact Details
-        await expect(await ConfirmOrderTab.getCName()).toBe(contactDetails.firstname + " " + contactDetails.lastname);
-        await expect(await ConfirmOrderTab.getCEmailAddress()).toBe(contactDetails.email);
-        await expect((await ConfirmOrderTab.getCNumber())).toContain(contactDetails.phoneNumber.toString());
-        await expect(await ConfirmOrderTab.getCAddress()).toContain(contactDetails.addressline1);
+        await expect(await ConfirmOrderTab.getContactName()).toBe(contactDetails.firstname + " " + contactDetails.lastname);
+        await expect(await ConfirmOrderTab.getContactEmailAddress()).toBe(contactDetails.email);
+        await expect((await ConfirmOrderTab.getContactNumber())).toContain(contactDetails.phoneNumber.toString());
+        await expect(await ConfirmOrderTab.getContactAddress()).toContain(contactDetails.addressline1);
         if(contactDetails.addressline2.length > 0)
-            await expect(await ConfirmOrderTab.getCAddress()).toContain(contactDetails.addressline2);
-        await expect(await ConfirmOrderTab.getCAddress()).toContain(contactDetails.suburb);
-        await expect(await ConfirmOrderTab.getCAddress()).toContain(contactDetails.state);
-        await expect(await ConfirmOrderTab.getCAddress()).toContain(contactDetails.postcode.toString());
+            await expect(await ConfirmOrderTab.getContactAddress()).toContain(contactDetails.addressline2);
+        await expect(await ConfirmOrderTab.getContactAddress()).toContain(contactDetails.suburb);
+        await expect(await ConfirmOrderTab.getContactAddress()).toContain(contactDetails.state);
+        await expect(await ConfirmOrderTab.getContactAddress()).toContain(contactDetails.postcode.toString());
 
         // Validating Delivery Details
-        await expect(await ConfirmOrderTab.getDName()).toBe(deliveryDetails.name);
-        await expect(await ConfirmOrderTab.getDAddress()).toContain(deliveryDetails.addressline1);
+        await expect(await ConfirmOrderTab.getDeliveryName()).toBe(deliveryDetails.name);
+        await expect(await ConfirmOrderTab.getDeliveryAddress()).toContain(deliveryDetails.addressline1);
         if(deliveryDetails.addressline2.length > 0)
-            await expect(await ConfirmOrderTab.getDAddress()).toContain(deliveryDetails.addressline2);
-        await expect(await ConfirmOrderTab.getDAddress()).toContain(deliveryDetails.suburb);
-        await expect(await ConfirmOrderTab.getDAddress()).toContain(deliveryDetails.state);
-        await expect(await ConfirmOrderTab.getDAddress()).toContain(deliveryDetails.postcode.toString());
+            await expect(await ConfirmOrderTab.getDeliveryAddress()).toContain(deliveryDetails.addressline2);
+        await expect(await ConfirmOrderTab.getDeliveryAddress()).toContain(deliveryDetails.suburb);
+        await expect(await ConfirmOrderTab.getDeliveryAddress()).toContain(deliveryDetails.state);
+        await expect(await ConfirmOrderTab.getDeliveryAddress()).toContain(deliveryDetails.postcode.toString());
         
 
         // Payment Details section validation
@@ -165,24 +165,24 @@ describe('Jupiter Toys Web Application', () => {
 
         // Delivery & Contact Details section validation
         // Validating Contact Details
-        await expect(await ConfirmOrderTab.getCName()).toBe(contactDetails.firstname + " " + contactDetails.lastname);
-        await expect(await ConfirmOrderTab.getCEmailAddress()).toBe(contactDetails.email);
-        await expect((await ConfirmOrderTab.getCNumber())).toContain(contactDetails.phoneNumber.toString());
-        await expect(await ConfirmOrderTab.getCAddress()).toContain(contactDetails.addressline1);
+        await expect(await ConfirmOrderTab.getContactName()).toBe(contactDetails.firstname + " " + contactDetails.lastname);
+        await expect(await ConfirmOrderTab.getContactEmailAddress()).toBe(contactDetails.email);
+        await expect((await ConfirmOrderTab.getContactNumber())).toContain(contactDetails.phoneNumber.toString());
+        await expect(await ConfirmOrderTab.getContactAddress()).toContain(contactDetails.addressline1);
         if(contactDetails.addressline2.length > 0)
-            await expect(await ConfirmOrderTab.getCAddress()).toContain(contactDetails.addressline2);
-        await expect(await ConfirmOrderTab.getCAddress()).toContain(contactDetails.suburb);
-        await expect(await ConfirmOrderTab.getCAddress()).toContain(contactDetails.state);
-        await expect(await ConfirmOrderTab.getCAddress()).toContain(contactDetails.postcode.toString());
+            await expect(await ConfirmOrderTab.getContactAddress()).toContain(contactDetails.addressline2);
+        await expect(await ConfirmOrderTab.getContactAddress()).toContain(contactDetails.suburb);
+        await expect(await ConfirmOrderTab.getContactAddress()).toContain(contactDetails.state);
+        await expect(await ConfirmOrderTab.getContactAddress()).toContain(contactDetails.postcode.toString());
 
         // Validating Delivery Details
-        await expect(await ConfirmOrderTab.getDName()).toBe(contactDetails.firstname + " " + contactDetails.lastname);
-        await expect(await ConfirmOrderTab.getDAddress()).toContain(contactDetails.addressline1);
+        await expect(await ConfirmOrderTab.getDeliveryName()).toBe(contactDetails.firstname + " " + contactDetails.lastname);
+        await expect(await ConfirmOrderTab.getDeliveryAddress()).toContain(contactDetails.addressline1);
         if(contactDetails.addressline2.length > 0)
-            await expect(await ConfirmOrderTab.getDAddress()).toContain(contactDetails.addressline2);
-        await expect(await ConfirmOrderTab.getDAddress()).toContain(contactDetails.suburb);
-        await expect(await ConfirmOrderTab.getDAddress()).toContain(contactDetails.state);
-        await expect(await ConfirmOrderTab.getDAddress()).toContain(contactDetails.postcode.toString());
+            await expect(await ConfirmOrderTab.getDeliveryAddress()).toContain(contactDetails.addressline2);
+        await expect(await ConfirmOrderTab.getDeliveryAddress()).toContain(contactDetails.suburb);
+        await expect(await ConfirmOrderTab.getDeliveryAddress()).toContain(contactDetails.state);
+        await expect(await ConfirmOrderTab.getDeliveryAddress()).toContain(contactDetails.postcode.toString());
         
 
         // Payment Details section validation

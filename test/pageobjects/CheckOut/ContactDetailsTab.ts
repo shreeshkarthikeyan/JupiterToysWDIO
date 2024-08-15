@@ -1,37 +1,36 @@
 import { ContactDetails } from "../../data/contact.details.js";
 import CheckoutPage from "./CheckoutPage.js";
-import deliveryDetailsForm from "./DeliveryDetailsTab.js";
 
 class ContactDetailsTab extends CheckoutPage {
     constructor() {
         super();
     }
     
-    public get inpFirstName() {
+    public get inputFirstName() {
         return this.activeTabContainer.$(".//input[@ng-reflect-name='firstName']");
     }
 
-    public get inpLastName() {
+    public get inputLastName() {
         return this.activeTabContainer.$(".//input[@ng-reflect-name='lastName']");
     }
 
-    public get inpEmail() {
+    public get inputEmail() {
         return this.activeTabContainer.$(".//input[@ng-reflect-name='email']");
     }
 
-    public get inpPhoneNumber() {
+    public get inputPhoneNumber() {
         return this.activeTabContainer.$(".//input[@ng-reflect-name='phonenumber']");
     }
 
-    public get inpAddressLine1() {
+    public get inputAddressLine1() {
         return this.activeTabContainer.$(".//input[@ng-reflect-name='addressline1']");
     }
 
-    public get inpAddressLine2() {
+    public get inputAddressLine2() {
         return this.activeTabContainer.$(".//input[@ng-reflect-name='addressline2']");
     }
 
-    public get inpSuburb() {
+    public get inputSuburb() {
         return this.activeTabContainer.$(".//input[@ng-reflect-name='suburb']");
     }
 
@@ -39,20 +38,20 @@ class ContactDetailsTab extends CheckoutPage {
         return this.activeTabContainer.$(".//mat-select[@ng-reflect-name='state']");
     }
 
-    public get inpPostcode() {
+    public get inputPostcode() {
         return this.activeTabContainer.$(".//input[@ng-reflect-name='postcode']");
     }
 
     public async addContactDetails(contactDetails: ContactDetails) : Promise<void> {
-        await this.enterValue(this.inpFirstName, contactDetails.firstname);
-        await this.enterValue(this.inpLastName, contactDetails.lastname);
-        await this.enterValue(this.inpEmail, contactDetails.email);
-        await this.enterValue(this.inpPhoneNumber, contactDetails.phoneNumber);
-        await this.enterValue(this.inpAddressLine1, contactDetails.addressline1);
-        await this.enterValue(this.inpAddressLine2, contactDetails.addressline2);
-        await this.enterValue(this.inpSuburb, contactDetails.suburb);
+        await this.enterValue(this.inputFirstName, contactDetails.firstname);
+        await this.enterValue(this.inputLastName, contactDetails.lastname);
+        await this.enterValue(this.inputEmail, contactDetails.email);
+        await this.enterValue(this.inputPhoneNumber, contactDetails.phoneNumber);
+        await this.enterValue(this.inputAddressLine1, contactDetails.addressline1);
+        await this.enterValue(this.inputAddressLine2, contactDetails.addressline2);
+        await this.enterValue(this.inputSuburb, contactDetails.suburb);
         await this.selectOption(this.selectState, contactDetails.state);
-        await this.enterValue(this.inpPostcode, contactDetails.postcode);
+        await this.enterValue(this.inputPostcode, contactDetails.postcode);
     }
 
     public async clickNext() {

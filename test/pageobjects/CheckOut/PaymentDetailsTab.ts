@@ -1,6 +1,5 @@
 import { PaymentDetails } from "../../data/payment.details.js";
 import CheckOutPage from "./CheckoutPage.js";
-import confirmOrderForm from "./ConfirmOrderTab.js";
 
 class PaymentDetailsTab extends CheckOutPage {
 
@@ -8,7 +7,7 @@ class PaymentDetailsTab extends CheckOutPage {
         super();
     }
     
-    public get inpCreditCardNumber() {
+    public get inputCreditCardNumber() {
         return this.activeTabContainer.$(".//input[@ng-reflect-name='creditcardno']");
     }
 
@@ -16,25 +15,25 @@ class PaymentDetailsTab extends CheckOutPage {
         return this.activeTabContainer.$(".//mat-select[@ng-reflect-name='creditcardtype']");
     }
 
-    public get inpCreditCardName() {
+    public get inputCreditCardName() {
         return this.activeTabContainer.$(".//input[@ng-reflect-name='creditcardname']");
     }
 
-    public get inpCreditCardExpiry() {
+    public get inputCreditCardExpiry() {
         return this.activeTabContainer.$(".//input[@ng-reflect-name='creditcardexpiry']");
     }
 
-    public get inpCreditCardCVV() {
+    public get inputCreditCardCVV() {
         return this.activeTabContainer.$(".//input[@ng-reflect-name='creditcardcvv']");
     }
 
     public async addPaymentDetails(paymentDetails: PaymentDetails) : Promise<void> {
         await this.waitForActiveTabToBe("Payment Details");
-        await this.enterValue(this.inpCreditCardNumber, paymentDetails.cardnumber);
+        await this.enterValue(this.inputCreditCardNumber, paymentDetails.cardnumber);
         await this.selectOption(this.selectCreditCardType, paymentDetails.cardtype);
-        await this.enterValue(this.inpCreditCardName, paymentDetails.cardname);
-        await this.enterValue(this.inpCreditCardExpiry, paymentDetails.expirydate);        
-        await this.enterValue(this.inpCreditCardCVV, paymentDetails.cvv);
+        await this.enterValue(this.inputCreditCardName, paymentDetails.cardname);
+        await this.enterValue(this.inputCreditCardExpiry, paymentDetails.expirydate);        
+        await this.enterValue(this.inputCreditCardCVV, paymentDetails.cvv);
     }
 
     public async clickNext() {
