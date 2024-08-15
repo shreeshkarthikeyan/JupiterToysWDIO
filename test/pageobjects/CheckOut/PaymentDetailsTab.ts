@@ -29,6 +29,7 @@ class PaymentDetailsTab extends CheckOutPage {
     }
 
     public async addPaymentDetails(paymentDetails: PaymentDetails) : Promise<void> {
+        await this.waitForActiveTabToBe("Payment Details");
         await this.enterValue(this.inpCreditCardNumber, paymentDetails.cardnumber);
         await this.selectOption(this.selectCreditCardType, paymentDetails.cardtype);
         await this.enterValue(this.inpCreditCardName, paymentDetails.cardname);
@@ -36,10 +37,8 @@ class PaymentDetailsTab extends CheckOutPage {
         await this.enterValue(this.inpCreditCardCVV, paymentDetails.cvv);
     }
 
-    public async clickNext(): Promise<any> {
+    public async clickNext() {
         await super.clickNext();
-        await this.waitForActiveTabToBe("Confirm Order");
-        return confirmOrderForm;
     }
 }
 

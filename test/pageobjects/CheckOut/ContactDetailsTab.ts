@@ -55,10 +55,9 @@ class ContactDetailsTab extends CheckoutPage {
         await this.enterValue(this.inpPostcode, contactDetails.postcode);
     }
 
-    public async clickNext() :Promise<any> {
+    public async clickNext() {
         await super.clickNext();
-        await this.waitForActiveTabToBe("Delivery Details");
-        return deliveryDetailsForm;
+        
     }
 }
 

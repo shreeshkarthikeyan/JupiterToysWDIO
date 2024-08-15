@@ -17,6 +17,7 @@ class ConfirmOrderTab extends CheckOutPage {
     }
 
     public async sectionContainer(sectionName : string) {
+        await this.waitForActiveTabToBe("Confirm Order");
         return await (await this.activeTabContainer).$(".//mat-panel-title[contains(text(),'" + sectionName + "')]/../../..");
     }
 

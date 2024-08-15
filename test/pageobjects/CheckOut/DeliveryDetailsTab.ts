@@ -41,29 +41,23 @@ class DeliveryDetailsTab extends CheckOutPage {
     }
 
     public async addDeliveryDetails(deliveryDetails: DeliveryDetails) : Promise<void> {
-        if(deliveryDetails.isSameAsContactAddress) {
-            let classValue = await (await this.isSameAsContactAddress).getAttribute("class");
-            if(!(classValue.includes("mat-radio-checked"))) {
-                await this.click(this.isSameAsContactAddress);
-            }
-        }else {
-            let classValue = await (await this.isNotSameAsContactAddress).getAttribute("class");
-            if(!(classValue.includes("mat-radio-checked"))) {
-                await this.click(this.isNotSameAsContactAddress);
-            } 
-            await this.enterValue(this.inpName, deliveryDetails.name);
-            await this.enterValue(this.inpAddressLine1, deliveryDetails.addressline1);
-            await this.enterValue(this.inpAddressLine2, deliveryDetails.addressline2);
-            await this.enterValue(this.inpSuburb, deliveryDetails.suburb);
-            await this.selectOption(this.selectState, deliveryDetails.state);
-            await this.enterValue(this.inpPostcode, deliveryDetails.postcode);
-        }
+        await this.waitForActiveTabToBe("Delivery Details");
+        await this.click(this.isNotSameAsContactAddress);
+        await this.enterValue(this.inpName, deliveryDetails.name);
+        await this.enterValue(this.inpAddressLine1, deliveryDetails.addressline1);
+        await this.enterValue(this.inpAddressLine2, deliveryDetails.addressline2);
+        await this.enterValue(this.inpSuburb, deliveryDetails.suburb);
+        await this.selectOption(this.selectState, deliveryDetails.state);
+        await this.enterValue(this.inpPostcode, deliveryDetails.postcode);
     }
 
-    public async clickNext(): Promise<any> {
+    public async selectSameAsContactAddress() {
+        await this.waitForActiveTabToBe("Delivery Details");
+        await this.click(this.isSameAsContactAddress);
+    }
+
+    public async clickNext() {
         await super.clickNext();
-        await this.waitForActiveTabToBe("Payment Details");
-        return paymentDetailsForm;
     }
 }
 
