@@ -46,11 +46,6 @@ export default class Page {
         return this.menuBarContainer.$(".//button[.//text()='Login']");
     }
 
-
-    public navigateToUrl () {
-        return browser.url("https://ec2-54-206-101-9.ap-southeast-2.compute.amazonaws.com:5200/home");
-    }
-
     public async clickHome() : Promise<this> {
         await this.click(this.btnHome);
         return this;

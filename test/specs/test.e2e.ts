@@ -24,9 +24,6 @@ describe('Jupiter Toys Web Application', () => {
         const paymentDetails = new PaymentDetails(Number(1234123412341234),
             "Mastercard", "Shreesh Karthikeyan", "12/26", Number(123)
         );
-
-
-        await shop.navigateToUrl();
         
         let shopPage = await shop.clickShop();
     
@@ -132,8 +129,6 @@ describe('Jupiter Toys Web Application', () => {
             "Mastercard", "Shreesh Karthikeyan", "12/26", Number(123)
         );
 
-        await shop.navigateToUrl();
-        
         let shopPage = await shop.clickShop();
 
         for (var i in toysList) {

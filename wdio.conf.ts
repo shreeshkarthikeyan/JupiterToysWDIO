@@ -100,7 +100,7 @@ export const config: Options.Testrunner = {
     // with `/`, the base url gets prepended, not including the path portion of your baseUrl.
     // If your `url` parameter starts without a scheme or `/` (like `some/path`), the base url
     // gets prepended directly.
-    // baseUrl: 'http://localhost:8080',
+     baseUrl: 'https://ec2-54-206-101-9.ap-southeast-2.compute.amazonaws.com:5200',
     //
     // Default timeout for all waitFor* commands.
     waitforTimeout: 10000,
@@ -224,8 +224,9 @@ export const config: Options.Testrunner = {
     /**
      * Function to be executed before a test (in Mocha/Jasmine) starts.
      */
-    // beforeTest: function (test, context) {
-    // },
+     beforeTest: function (test, context) {
+        browser.url(this.baseUrl === undefined ? "" : this.baseUrl);
+     },
     /**
      * Hook that gets executed _before_ a hook within the suite starts (e.g. runs before calling
      * beforeEach in Mocha)
