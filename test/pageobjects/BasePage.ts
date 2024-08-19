@@ -1,6 +1,6 @@
 import { browser } from '@wdio/globals'
 import { $ } from '@wdio/globals'
-import shop from './ShopPage.js';
+//import shop from './ShopPage.js';
 //import cart from './cart.js';
 
 /**
@@ -53,7 +53,7 @@ export default class Page {
 
     public async clickShop () {
         await this.click(this.btnShop);
-        return shop;
+        //return shop;
     }
 
     public async clickCart() {

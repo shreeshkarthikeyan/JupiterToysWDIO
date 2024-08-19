@@ -10,7 +10,7 @@ class HomePage extends Page {
         return $("//a[contains(text(),\"Start Shopping\")]");
     }
 
-    public async clickStartShopping() {
+    public async clickStartShopping() : Promise<void> {
         await this.click(this.btnStartShopping);
     }
 }

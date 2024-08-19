@@ -1,11 +1,11 @@
 import { expect } from '@wdio/globals'
-import shop from '../pageobjects/ShopPage.js'
+import shopPage from '../pageobjects/ShopPage.js'
 import CartPage from '../pageobjects/CartPage.js'
 import { ContactDetails } from '../data/contact.details.js'
 import { DeliveryDetails } from '../data/delivery.details.js'
 import { PaymentDetails } from '../data/payment.details.js'
 import { Toy } from '../data/toy.js'
-import HomePage from '../pageobjects/HomePage.js'
+import homePage from '../pageobjects/HomePage.js'
 import DeliveryDetailsTab from '../pageobjects/CheckOut/DeliveryDetailsTab.js'
 import PaymentDetailsTab from '../pageobjects/CheckOut/PaymentDetailsTab.js'
 import ConfirmOrderTab from '../pageobjects/CheckOut/ConfirmOrderTab.js'
@@ -29,11 +29,9 @@ describe('Jupiter Toys Web Application', () => {
             "Mastercard", "Shreesh Karthikeyan", "12/26", Number(123)
         );
         
-        let shopPage = await shop.clickShop();
-    
-        //toy purchasing:
+        await homePage.clickShop();
         await shopPage.addToy(toy1.toyName, toy1.quantity);
-        let toyPrice: number = await shopPage.getToyPrice(toy1.toyName);
+        let toyPrice : number = await shopPage.getToyPrice(toy1.toyName);
         toy1.price = toyPrice;
         let toySubTotal : number = toy1.price * toy1.quantity;
         let totalPrice : number = toySubTotal;
@@ -83,7 +81,6 @@ describe('Jupiter Toys Web Application', () => {
         await expect(await ConfirmOrderTab.getDeliveryAddress()).toContain(deliveryDetails.suburb);
         await expect(await ConfirmOrderTab.getDeliveryAddress()).toContain(deliveryDetails.state);
         await expect(await ConfirmOrderTab.getDeliveryAddress()).toContain(deliveryDetails.postcode.toString());
-        
 
         // Payment Details section validation
         await expect(await ConfirmOrderTab.getCardName()).toBe(paymentDetails.cardname);
@@ -96,9 +93,7 @@ describe('Jupiter Toys Web Application', () => {
 
         console.log("Payment Status => " + await resultsPage.getPaymentStatus());
         console.log("Order Number => " + await resultsPage.getPaymentStatus());
-
     }),
-
     it('Same contact address and delivery address', async () => {
         //test data:
 
@@ -120,7 +115,7 @@ describe('Jupiter Toys Web Application', () => {
             "Mastercard", "Shreesh Karthikeyan", "12/26", Number(123)
         );
 
-        let shopPage = await shop.clickShop();
+        homePage.clickShop();
 
         for (var i in toysList) {
             console.log("Toy's name: " + toysList[i].toyName + " , Quantity: "+toysList[i].quantity);
