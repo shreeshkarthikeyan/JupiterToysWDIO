@@ -54,10 +54,6 @@ class DeliveryDetailsTab extends CheckOutPage {
         await this.waitForActiveTabToBe("Delivery Details");
         await this.click(this.isSameAsContactAddress);
     }
-
-    public async clickNext() {
-        await super.clickNext();
-    }
 }
 
 export default new DeliveryDetailsTab();

@@ -53,11 +53,6 @@ class ContactDetailsTab extends CheckoutPage {
         await this.selectOption(this.selectState, contactDetails.state);
         await this.enterValue(this.inputPostcode, contactDetails.postcode);
     }
-
-    public async clickNext() {
-        await super.clickNext();
-        
-    }
 }
 
 export default new ContactDetailsTab();

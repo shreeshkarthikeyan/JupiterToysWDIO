@@ -1,6 +1,6 @@
-import Page from "./BasePage.js"
+import Page from "../BasePage.js"
 
-class ResultsPage extends Page {
+class OrderOutcomePage extends Page {
 
     
     constructor() {
@@ -26,4 +26,4 @@ class ResultsPage extends Page {
     }
 }
 
-export default new ResultsPage();
+export default new OrderOutcomePage();

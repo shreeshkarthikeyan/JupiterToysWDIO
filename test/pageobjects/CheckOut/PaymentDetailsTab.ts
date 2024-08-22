@@ -35,10 +35,6 @@ class PaymentDetailsTab extends CheckOutPage {
         await this.enterValue(this.inputCreditCardExpiry, paymentDetails.expirydate);        
         await this.enterValue(this.inputCreditCardCVV, paymentDetails.cvv);
     }
-
-    public async clickNext() {
-        await super.clickNext();
-    }
 }
 
 export default new PaymentDetailsTab();

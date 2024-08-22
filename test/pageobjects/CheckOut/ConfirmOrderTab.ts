@@ -1,4 +1,4 @@
-import results from "../ResultsPage.js";
+import orderOutcome from "./OrderOutcomePage.js";
 import CheckOutPage from "./CheckoutPage.js";
 
 class ConfirmOrderTab extends CheckOutPage {
@@ -18,7 +18,6 @@ class ConfirmOrderTab extends CheckOutPage {
 
     public async sectionContainer(sectionName : string) {
         await this.waitForActiveTabToBe("Confirm Order");
-        //return await (await this.activeTabContainer).$(".//mat-panel-title[contains(text(),'" + sectionName + "')]/../../..");
         return await (await this.activeTabContainer).$(".//mat-expansion-panel[.//mat-panel-title[contains(text(),'" + sectionName + "')]]");
         
     }
@@ -111,7 +110,7 @@ class ConfirmOrderTab extends CheckOutPage {
 
     public async clickSubmitOrder() : Promise<any> {
         await this.click(this.btnSubmitOrder);
-        return results;
+        return orderOutcome;
     }
 }
 
