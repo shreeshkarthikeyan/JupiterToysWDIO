@@ -1,4 +1,4 @@
-import axios, { AxiosError } from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 import { Agent } from "https";
 import Token from "./Token.js";
 
@@ -38,12 +38,14 @@ instance.interceptors.response.use(
   );
 
 export default class BaseApi {
-
+  
+    responseBody = <T>(response: AxiosResponse<T>) => response.data;
+    
     requests = {
-        post : async (url : string, data : {}) => await instance.post(url, data).then(response => response.data),
-        delete : async (url : string) => await instance.delete(url).then(response => response.data),
-        patch : async <T>(url: string, data: {}) => await instance.patch<T>(url, data).then(response => response.data),
-        put : async (url : string, data : {}) => await instance.put(url, data).then(response => response.data),
-        getAll : async <T>(url: string) => await instance.get<T>(url).then(response => response.data),
+        post : async (url : string, data : {}) => await instance.post(url, data).then(this.responseBody),
+        delete : async (url : string) => await instance.delete(url).then(this.responseBody),
+        patch : async <T>(url: string, data: {}) => await instance.patch<T>(url, data).then(this.responseBody),
+        put : async (url : string, data : {}) => await instance.put(url, data).then(this.responseBody),
+        getAll : async <T>(url: string) => await instance.get<T>(url).then(this.responseBody),
     }
 }
