@@ -9,17 +9,11 @@ import homePage from '../pageobjects/HomePage.js'
 import DeliveryDetailsTab from '../pageobjects/CheckOut/DeliveryDetailsTab.js'
 import PaymentDetailsTab from '../pageobjects/CheckOut/PaymentDetailsTab.js'
 import ConfirmOrderTab from '../pageobjects/CheckOut/ConfirmOrderTab.js'
-import toyAPIhandler from '../api/toyAPIhandler.js'
-import { ToyAPI } from '../model/toyAPI.js'
 
 describe('Jupiter Toys Web Application', () => {
 
     it('Different contact address and delivery address', async () => {
-
-    //let list = toyAPIhandler.getUsers<ToyAPI[]>();
-    //console.log("Response: "+ list.then(toy => toy?.at(0)));
-
-
+    
         const toy1 = new Toy("Rubik's Cube", 2);
 
         //test data:
@@ -99,7 +93,7 @@ describe('Jupiter Toys Web Application', () => {
 
         console.log("Payment Status => " + await orderOutcomePage.getPaymentStatus());
         console.log("Order Number => " + await orderOutcomePage.getPaymentStatus());
-    }), 
+    }),
 
     it('Same contact address and delivery address', async () => {
         //test data:

@@ -31,6 +31,7 @@ export const config: Options.Testrunner = {
     //
     specs: [
         './test/specs/**/*.ts'
+        //'./test/specs/test.api.ts'
     ],
     // Patterns to exclude.
     exclude: [
