@@ -87,20 +87,20 @@ describe('Jupiter Toys API testing', () => {
         customerApi.id = Number(customerId);
         customerApi.addresses = [addressApi]
         //Update customer address:
-        let customerDetails: CustomerAPI = await UserAPIhandler.updateCustomerAddress(customerId, customerApi);
+        let customerDetails = await UserAPIhandler.updateCustomerAddress(customerId, customerApi);
         await expect(customerDetails.id).toBe(customerApi.id);
         await expect(customerDetails.username).toBe(customerApi.username);
-        await expect(customerDetails.firstname).toBe(customerApi.firstname);
-        await expect(customerDetails.lastname).toBe(customerApi.lastname);
-        await expect(customerDetails.gender).toBe(customerApi.gender);
-        await expect(customerDetails.phoneNumber).toBe(customerApi.phoneNumber);
-        await expect(customerDetails.addresses.at(0)?.line1).toBe(customerApi.addresses.at(0)?.line1);
-        await expect(customerDetails.addresses.at(0)?.line2).toBe(customerApi.addresses.at(0)?.line2);
-        await expect(customerDetails.addresses.at(0)?.city).toBe(customerApi.addresses.at(0)?.city);
-        await expect(customerDetails.addresses.at(0)?.postcode).toBe(customerApi.addresses.at(0)?.postcode);
-        await expect(customerDetails.addresses.at(0)?.state).toBe(customerApi.addresses.at(0)?.state);
-        await expect(customerDetails.addresses.at(0)?.addresstype).toBe(customerApi.addresses.at(0)?.addresstype);
-        await expect(customerDetails.addresses.at(0)?.deliveryName).toBe(customerApi.addresses.at(0)?.deliveryName);
+        await expect(customerDetails?.firstname).toBe(customerApi.firstname);
+        await expect(customerDetails?.lastname).toBe(customerApi.lastname);
+        await expect(customerDetails?.gender).toBe(customerApi.gender);
+        await expect(customerDetails?.phoneNumber).toBe(customerApi.phoneNumber);
+        await expect(customerDetails?.addresses.at(0)?.line1).toBe(customerApi.addresses.at(0)?.line1);
+        await expect(customerDetails?.addresses.at(0)?.line2).toBe(customerApi.addresses.at(0)?.line2);
+        await expect(customerDetails?.addresses.at(0)?.city).toBe(customerApi.addresses.at(0)?.city);
+        await expect(customerDetails?.addresses.at(0)?.postcode).toBe(customerApi.addresses.at(0)?.postcode);
+        await expect(customerDetails?.addresses.at(0)?.state).toBe(customerApi.addresses.at(0)?.state);
+        await expect(customerDetails?.addresses.at(0)?.addresstype).toBe(customerApi.addresses.at(0)?.addresstype);
+        await expect(customerDetails?.addresses.at(0)?.deliveryName).toBe(customerApi.addresses.at(0)?.deliveryName);
 
 
         let transactionItemsList : TransactionItemAPI[] = [
@@ -155,5 +155,6 @@ describe('Jupiter Toys API testing', () => {
         let deleteToyResponseMessage = await toyAPIhandler.deleteToy(toyId);
         await expect(deleteToyResponseMessage).toBe(`Toy with id ${toyId} deleted successfully`);
     })
+
 });
 

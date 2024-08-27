@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { Agent } from "https";
 import Token from "./Token.js";
 
@@ -7,54 +7,43 @@ const instance =  axios.create({
         Authorization : `Bearer ${await Token.getToken()}`,
         Accept : "application/json"
     },
-    httpsAgent : new Agent({  
+    httpsAgent : new Agent({
         rejectUnauthorized: false
     })
-})
+});
+
+instance.interceptors.response.use(
+    (res) => res,
+    (error: AxiosError) => {
+      const { data, status } = error.response!;
+      switch (status) {
+        case 400:
+          console.error(data);
+          break;
+  
+        case 401:
+          console.error('unauthorised');
+          break;
+  
+        case 404:
+          console.error('/not-found');
+          break;
+  
+        case 500:
+          console.error('/server-error');
+          break;
+      }
+      return Promise.reject(error);
+    }
+  );
 
 export default class BaseApi {
 
-    public async postOperation(url: string, data : any) : Promise<string> {
-        let response = await instance.post(url, data)
-        .then(response => response.data)
-        .catch(err => console.log(err));
-
-        console.log("Post response:" + JSON.stringify(response));
-        return JSON.stringify(response);
-    }
-
-    public async deleteOperation(url: string) : Promise<string> {
-        let response = await instance.delete(url)
-        .then(response => response.data)
-        .catch(err => console.log(err));
-
-        console.log("Delete response:" + JSON.stringify(response));
-        return JSON.stringify(response);
-    }
-
-    public async patchOperation<T>(url: string, data : any) : Promise<T> {
-        let response : Promise<T> = await instance.patch(url, data)
-        .then(response => response.data)
-        .catch(err => console.log(err));
-
-        return response;
-    }
-
-    public async putOperation(url: string, data : any) {
-        let response = await instance.put(url, data)
-        .then(response => response.data)
-        .catch(err => console.log(err));
-
-        console.log("Put response:" + JSON.stringify(response));
-        return JSON.stringify(response);
-    }
-
-    public async getAllOperation<T>(url: string) : Promise<T[]> {
-
-        let data : Promise<T[]> = await instance.get(url)
-        .then(response => response.data)
-        .catch(err => console.log(err));
-
-        return data;
+    requests = {
+        post : async (url : string, data : {}) => await instance.post(url, data).then(response => response.data),
+        delete : async (url : string) => await instance.delete(url).then(response => response.data),
+        patch : async <T>(url: string, data: {}) => await instance.patch<T>(url, data).then(response => response.data),
+        put : async (url : string, data : {}) => await instance.put(url, data).then(response => response.data),
+        getAll : async <T>(url: string) => await instance.get<T>(url).then(response => response.data),
     }
 }

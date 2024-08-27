@@ -7,25 +7,33 @@ const URL = "https://ec2-54-206-101-9.ap-southeast-2.compute.amazonaws.com:7083"
 class UserAPIHandler extends BaseApi {
 
     public async createCustomer(customerApi : CustomerAPI) : Promise<string> {
-        let response = await this.postOperation(`${URL}/customer`, customerApi);
+        let response = await this.requests.post(`${URL}/customer`, customerApi);
+
+        response = JSON.stringify(response);
         let parsedResponse = JSON.parse(response);
         return parsedResponse.id;
     }
 
     public async updateCustomerAddress(customerId: string, customerApi : CustomerAPI) : Promise<CustomerAPI> {
-        let response : CustomerAPI = await this.patchOperation<CustomerAPI>(`${URL}/customer/${customerId}`, customerApi)
+        let response = await this.requests.patch<CustomerAPI>(`${URL}/customer/${customerId}`, customerApi)
+        
+        if(!(response !== null && typeof response === 'object')) {
+            throw new Error("Error in response");
+        }
         console.log(response.addresses.at(0)?.id);
         return response;
     }
 
     public async addToysToCart(customerId: string, toysAddToCart : TransactionHistoryAPI) {
-        let response = await this.putOperation(`${URL}/customer/${customerId}/purchase`, toysAddToCart)
+        let response = await this.requests.put(`${URL}/customer/${customerId}/purchase`, toysAddToCart)
+        
+        response = JSON.stringify(response);
         let parsedResponse = JSON.parse(response);
         return parsedResponse;
     }
 
     public async updatePurchaseStatus(transactionId: string, paymentStatusUpdate : any) : Promise<string> {
-        let response = await this.patchOperation<string>(`${URL}/transaction/${transactionId}`, paymentStatusUpdate);
+        let response = await this.requests.patch<string>(`${URL}/transaction/${transactionId}`, paymentStatusUpdate);
 
         response = JSON.stringify(response);
         let parsedResponse = JSON.parse(response);
@@ -33,7 +41,9 @@ class UserAPIHandler extends BaseApi {
     }
 
     public async deleteCustomer(customerId: string) {
-        let response = await this.deleteOperation(`${URL}/customer/${customerId}`)
+        let response = await this.requests.delete(`${URL}/customer/${customerId}`);
+
+        response = JSON.stringify(response);
         let parsedResponse = JSON.parse(response);
         return parsedResponse;
     }
