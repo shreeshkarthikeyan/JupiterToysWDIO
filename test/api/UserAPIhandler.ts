@@ -1,8 +1,9 @@
+import ReadProperties from "../config/ReadProperties.js";
 import { CustomerAPI } from "../model/CustomerAPI.js";
 import { TransactionHistoryAPI } from "../model/TransactionHistoryAPI.js";
 import BaseApi from "./BaseApi.js";
 
-const URL = "https://ec2-54-206-101-9.ap-southeast-2.compute.amazonaws.com:7083";
+const URL = ReadProperties.readEnvironmentVariables().customerbaseurl!;
 
 class UserAPIHandler extends BaseApi {
 

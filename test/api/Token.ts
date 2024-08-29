@@ -1,21 +1,22 @@
 import axios from "axios";
 import { Agent } from "https";
+import ReadProperties from "../config/ReadProperties.js";
 
 class Token {
 
     public async getToken() : Promise<string> {
 
         console.log("I am into this method");
-        let token = await axios.post("https://dev-96443153.okta.com/oauth2/default/v1/token", null, {
+        let token = await axios.post(ReadProperties.readEnvironmentVariables().tokenurl!, null, {
             params : {
-                "grant_type" : "client_credentials",
-                "scope" : "mod_custom",
-                "client_secret" : "5P2mWuJHiLBRdMdcmTP0Kp70Un2bApMxpfsI34yA",
-                "client_id" : "0oa1iocup696VlCxl5d7"
+                "grant_type" : ReadProperties.readEnvironmentVariables().grant_type!,
+                "scope" : ReadProperties.readEnvironmentVariables().scope!,
+                "client_secret" : ReadProperties.readEnvironmentVariables().client_secret!,
+                "client_id" : ReadProperties.readEnvironmentVariables().client_id!
             },
             headers : {
                 "Content-Type" : "application/x-www-form-urlencoded"
-            }, 
+            },
             httpsAgent : new Agent({  
                 rejectUnauthorized: false
             })
