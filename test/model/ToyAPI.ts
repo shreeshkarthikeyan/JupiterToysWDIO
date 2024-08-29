@@ -1,4 +1,4 @@
-import { LinkAPI } from "./listAPI.js";
+import { LinkAPI } from "./LinkAPI.js";
 
 export interface ToyAPI {
     id : number;
