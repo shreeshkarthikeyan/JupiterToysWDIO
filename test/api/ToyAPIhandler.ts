@@ -1,8 +1,7 @@
-import ReadProperties from "../config/ReadProperties.js";
 import { ToyAPI } from "../model/ToyAPI.js";
-import BaseApi from "./BaseApi.js";
+import BaseApi, { readEnvironmentVariables } from "./BaseApi.js";
 
-const URL = ReadProperties.readEnvironmentVariables().baseUrl!;
+const URL = readEnvironmentVariables().baseUrl!;
 
 class ToyAPIHandler extends BaseApi {
 

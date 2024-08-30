@@ -1,9 +1,8 @@
-import ReadProperties from "../config/ReadProperties.js";
 import { CustomerAPI } from "../model/CustomerAPI.js";
 import { TransactionHistoryAPI } from "../model/TransactionHistoryAPI.js";
-import BaseApi from "./BaseApi.js";
+import BaseApi, { readEnvironmentVariables } from "./BaseApi.js";
 
-const URL = ReadProperties.readEnvironmentVariables().customerbaseurl!;
+const URL = readEnvironmentVariables().customerbaseurl!;
 
 class UserAPIHandler extends BaseApi {
 

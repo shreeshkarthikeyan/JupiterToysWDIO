@@ -3,7 +3,7 @@ import { Agent } from "https";
 import * as path from "path";
 import * as dotnet from "dotenv";
 
-function readEnvironmentVariables() {
+export function readEnvironmentVariables() {
   const __dirname = path.resolve();
         dotnet.config({
             path : `${__dirname}/test/.env`
