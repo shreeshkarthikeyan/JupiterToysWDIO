@@ -1,7 +1,7 @@
 import { expect } from '@wdio/globals'
 import toyAPIhandler from '../api/ToyAPIhandler.js'
 import UserAPIhandler from '../api/UserAPIhandler.js'
-import { ToyAPI } from '../model/toyAPI.js'
+import { ToyAPI } from '../model/ToyAPI.js'
 import { LinkAPI } from '../model/LinkAPI.js'
 import { CustomerAPI } from '../model/CustomerAPI.js'
 import { AddressAPI } from '../model/AddressAPI.js'
