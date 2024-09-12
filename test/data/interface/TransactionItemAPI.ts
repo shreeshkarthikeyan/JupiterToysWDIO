@@ -1,4 +1,4 @@
-import { ToyAPI } from "./toyAPI.js";
+import { ToyAPI } from "./ToyAPI.js";
 
 export interface TransactionItemAPI {
     id : number;

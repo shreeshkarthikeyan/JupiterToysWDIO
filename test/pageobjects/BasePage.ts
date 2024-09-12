@@ -80,7 +80,7 @@ export default class Page {
     public async enterValue(element: any, text: any) {
         await this.checkForVisibility(element);
         await element.clearValue();
-        browser.pause(500);
+        await browser.pause(500);
         await element.setValue(text);
     }
 

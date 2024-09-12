@@ -102,7 +102,7 @@ export const config: Options.Testrunner = {
     // with `/`, the base url gets prepended, not including the path portion of your baseUrl.
     // If your `url` parameter starts without a scheme or `/` (like `some/path`), the base url
     // gets prepended directly.
-     baseUrl: 'https://ec2-54-206-101-9.ap-southeast-2.compute.amazonaws.com:5200',
+    baseUrl: 'https://ec2-54-206-101-9.ap-southeast-2.compute.amazonaws.com:5200',
     //
     // Default timeout for all waitFor* commands.
     waitforTimeout: 10000,

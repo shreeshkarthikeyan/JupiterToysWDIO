@@ -1,4 +1,4 @@
-import { ToyAPI } from "../model/ToyAPI.js";
+import { ToyAPI } from "../data/interface/ToyAPI.js";
 import BaseApi, { readEnvironmentVariables } from "./BaseApi.js";
 
 const URL = readEnvironmentVariables().baseUrl!;

@@ -1,12 +1,12 @@
 import { expect } from '@wdio/globals'
 import toyAPIhandler from '../api/ToyAPIhandler.js'
 import UserAPIhandler from '../api/UserAPIhandler.js'
-import { ToyAPI } from '../model/ToyAPI.js'
-import { LinkAPI } from '../model/LinkAPI.js'
-import { CustomerAPI } from '../model/CustomerAPI.js'
-import { AddressAPI } from '../model/AddressAPI.js'
-import { TransactionItemAPI } from '../model/TransactionItemAPI.js'
-import { TransactionHistoryAPI } from '../model/TransactionHistoryAPI.js'
+import { ToyAPI } from '../data/interface/ToyAPI.js'
+import { LinkAPI } from '../data/interface/LinkAPI.js'
+import { CustomerAPI } from '../data/interface/CustomerAPI.js'
+import { AddressAPI } from '../data/interface/AddressAPI.js'
+import { TransactionItemAPI } from '../data/interface/TransactionItemAPI.js'
+import { TransactionHistoryAPI } from '../data/interface/TransactionHistoryAPI.js'
 
 let toyId : string;
 let customerId : string;

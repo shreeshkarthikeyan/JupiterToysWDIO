@@ -1,5 +1,5 @@
-import { CustomerAPI } from "../model/CustomerAPI.js";
-import { TransactionHistoryAPI } from "../model/TransactionHistoryAPI.js";
+import { CustomerAPI } from "../data/interface/CustomerAPI.js";
+import { TransactionHistoryAPI } from "../data/interface/TransactionHistoryAPI.js";
 import BaseApi, { readEnvironmentVariables } from "./BaseApi.js";
 
 const URL = readEnvironmentVariables().customerbaseurl!;
