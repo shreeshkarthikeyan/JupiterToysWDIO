@@ -1,4 +1,12 @@
 import type { Options } from '@wdio/types'
+import * as dotnet from "dotenv";
+import * as path from 'path';
+
+const __dirname = path.resolve();
+dotnet.config({
+    path : `${__dirname}/test/.env`
+});
+
 export const config: Options.Testrunner = {
     //
     // ====================
@@ -63,7 +71,7 @@ export const config: Options.Testrunner = {
     capabilities: [{
         browserName: 'chrome',
         'goog:chromeOptions': {
-        args: ['start-maximized', 
+        args: ['start-maximized',
                '--ignore-certificate-errors', 
                '--ignore-ssl-errors=yes', 
                '--disable-notifications'

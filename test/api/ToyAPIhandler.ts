@@ -1,7 +1,7 @@
 import { ToyAPI } from "../data/interface/ToyAPI.js";
-import BaseApi, { readEnvironmentVariables } from "./BaseApi.js";
+import BaseApi from "./BaseApi.js";
 
-const URL = readEnvironmentVariables().baseUrl!;
+const URL = process.env.baseUrl!;
 
 class ToyAPIHandler extends BaseApi {
 

@@ -1,8 +1,8 @@
 import { CustomerAPI } from "../data/interface/CustomerAPI.js";
 import { TransactionHistoryAPI } from "../data/interface/TransactionHistoryAPI.js";
-import BaseApi, { readEnvironmentVariables } from "./BaseApi.js";
+import BaseApi from "./BaseApi.js";
 
-const URL = readEnvironmentVariables().customerbaseurl!;
+const URL = process.env.customerbaseurl!;
 
 class UserAPIHandler extends BaseApi {
 
