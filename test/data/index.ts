@@ -1,3 +1,3 @@
-export { default as contactDetails } from "./contact.details.ts";
-export { default as deliveryDetails } from "./delivery.details.ts";
-export { default as paymentDetails } from "./payment.details.ts";
+export { default as ContactDetails } from "./contact.details.js";
+export { default as DeliveryDetails } from "./delivery.details.js";
+export { default as PaymentDetails } from "./payment.details.js";

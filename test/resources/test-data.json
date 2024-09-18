@@ -1,0 +1,46 @@
+[
+    {
+        "id": 0,
+        "price": 25.99,
+        "category": "Small",
+        "title": "Dolphin",
+        "size": "Small",
+        "image": "https://www.pinterest.com.au/pin/766456430336669307/",
+        "stock": 30,
+        "links": [
+            {
+                "rel": "",
+                "href": "",
+                "hreflang": "",
+                "media": "",
+                "title": "",
+                "type": "",
+                "deprecation": "",
+                "profile": "",
+                "name": ""
+            }
+        ]
+    },
+    {
+        "id": 0,
+        "price": 18.99,
+        "category": "Small",
+        "title": "Mouse",
+        "size": "Medium",
+        "image": "https://www.pinterest.com.au/pin/766456430336669307/",
+        "stock": 30,
+        "links": [
+            {
+                "rel": "",
+                "href": "",
+                "hreflang": "",
+                "media": "",
+                "title": "",
+                "type": "",
+                "deprecation": "",
+                "profile": "",
+                "name": ""
+            }
+        ]
+    }
+]

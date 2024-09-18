@@ -1,11 +1,10 @@
-import { browser } from '@wdio/globals'
-import { $ } from '@wdio/globals'
+import { browser , $ } from '@wdio/globals'
 //import shop from './ShopPage.js';
 //import cart from './cart.js';
 
 /**
 * main page object containing all methods, selectors and functionality
-* that is shared across all page objects
+* that is shared across all page objects 
 */
 export default class Page {
 

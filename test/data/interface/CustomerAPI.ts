@@ -1,4 +1,4 @@
-import { addressApi, transactionHistoryAPI } from "./index.js";
+import { AddressAPI , TransactionHistoryAPI } from "./index.js"
 
 export default interface CustomerAPI {
     id : number;
@@ -7,6 +7,6 @@ export default interface CustomerAPI {
     lastname : string;
     gender : string;
     phoneNumber : string;
-    addresses : addressApi[];
-    transactionHistory : transactionHistoryAPI[];
+    addresses : AddressAPI[];
+    transactionHistory : TransactionHistoryAPI[];
 }

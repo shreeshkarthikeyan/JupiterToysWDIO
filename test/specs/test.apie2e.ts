@@ -1,45 +1,15 @@
 import { expect } from '@wdio/globals'
-import { toyAPIHandler, userAPIHandler } from '../api/index.js'
-import { confirmOrderTab, deliveryDetailsTab, paymentDetailsTab } from '../pageobjects/CheckOut/index.js'
-import { contactDetails, deliveryDetails, paymentDetails } from '../data/index.js'
-import { cartPage, shopPage, homePage } from '../pageobjects/index.js'
-import { addressApi, toyApi, linkApi, customerApi, transactionHistoryAPI, transactionItemAPI } from '../data/interface/index.js'
+import toyAPIhandler from '../api/ToyAPIhandler.js'
+import UserAPIhandler from '../api/UserAPIhandler.js'
+import CartPage from '../pageobjects/CartPage.js'
+import homePage from '../pageobjects/HomePage.js'
+import shopPage from '../pageobjects/ShopPage.js'
+import testdata from "../resources/test-data.json" assert { type: "json" };
+import { AddressAPI, ToyAPI, CustomerAPI, TransactionItemAPI, TransactionHistoryAPI } from '../data/interface/index.js';
+import { ContactDetails, DeliveryDetails, PaymentDetails } from "../data/index.js";
+import { ConfirmOrderTab, DeliveryDetailsTab, PaymentDetailsTab } from "../pageobjects/CheckOut/index.js"
 
-let linkAPI : linkApi = {
-    rel: "",
-    href: "",
-    hreflang: "",
-    media: "",
-    title: "",
-    type: "",
-    deprecation: "",
-    profile: "",
-    name: ""
-}
-
-let toyAPI : toyApi = {
-    id: 0,
-    price: 25.99,
-    category: "Small",
-    title: "Dolphin",
-    size: "Small",
-    image: "https://www.pinterest.com.au/pin/766456430336669307/",
-    stock: 30,
-    links: [linkAPI]
-}
-
-let toy2API : toyApi = {
-    id: 0,
-    price: 18.99,
-    category: "Small",
-    title: "Mouse",
-    size: "Medium",
-    image: "https://www.pinterest.com.au/pin/766456430336669307/",
-    stock: 30,
-    links: [linkAPI]
-}
-
-let customerAPI : customerApi = {
+let customerApi : CustomerAPI = {
     id: 0,
     username: "Shreeshthikeyan30@gmail.com",
     firstname: "Shreesh",
@@ -51,32 +21,35 @@ let customerAPI : customerApi = {
 }
 
 interface ToyToPurchaseWithQuantity {
-    toy : toyApi,
+    toy : ToyAPI,
     quantity : number
 }
 
-const toyListToPurchaseWithQuantity : ToyToPurchaseWithQuantity[] = [{
-    toy: toyAPI,
-    quantity: 2
-}, {
-    toy : toy2API,
-    quantity: 3
-}];
-
-
+const toyListToPurchaseWithQuantity : ToyToPurchaseWithQuantity[] = [];
 
 describe('Jupiter Toys API and UI testing', () => {
+
+    beforeAll(async () => {
+        for(const toy of testdata) {
+            var jsonString = JSON.stringify(toy);
+            var toyToPurchase : ToyAPI = JSON.parse(jsonString);
+            toyListToPurchaseWithQuantity.push({
+                toy : toyToPurchase,
+                quantity : 2 // Defaults to buy only 2
+            });
+        };
+    })
 
     it('Scenario 1 - Verify create and view toy THROUGH API', async () => {
 
         for (const purchasingToy of toyListToPurchaseWithQuantity) {
             //Create toy:
-            let toyId = await toyAPIHandler.createToy(purchasingToy.toy);
+            let toyId = await toyAPIhandler.createToy(purchasingToy.toy);
             console.log(toyId);
 
             purchasingToy.toy.id = Number(toyId);
             //Get toy:
-            let toyDetails = await toyAPIHandler.getToyById(purchasingToy.toy.id.toString());
+            let toyDetails = await toyAPIhandler.getToyById(purchasingToy.toy.id.toString());
             if(toyDetails === undefined)
                 throw new Error("No such toy created");
         
@@ -91,15 +64,15 @@ describe('Jupiter Toys API and UI testing', () => {
 
     it('Scenario 2 - Different contact address and delivery address THROUGH UI', async () => {
         //test data:
-        const contactDetail = new contactDetails("Shreesh", "Karthikeyan", "shreeshkarthikeyan30@gmail.com",
+        const contactDetails = new ContactDetails("Shreesh", "Karthikeyan", "shreeshkarthikeyan30@gmail.com",
             Number(61456314971), "2, Coppin Close", "", "Hampton Park", "VIC", Number(3976)
         );
 
-        const deliveryDetail = new deliveryDetails("Student Housing Accomodation",
+        const deliveryDetails = new DeliveryDetails("Student Housing Accomodation",
             "Unit 201, 2 Eastern Place", "", "Hawthorn East", "VIC", Number(3123)
         );
 
-        const paymentDetail = new paymentDetails(Number(1234123412341234),
+        const paymentDetails = new PaymentDetails(Number(1234123412341234),
             "Mastercard", "Shreesh Karthikeyan", "12/26", Number(123)
         );
         
@@ -117,62 +90,62 @@ describe('Jupiter Toys API and UI testing', () => {
 
         for (var i in toyListToPurchaseWithQuantity) {
             let toySubTotal : number = (toyListToPurchaseWithQuantity[i].toy.price === undefined ? Number(0) : Number(toyListToPurchaseWithQuantity[i].toy.price)) * toyListToPurchaseWithQuantity[i].quantity;
-            await expect(await cartPage.getToyQuantity(toyListToPurchaseWithQuantity[i].toy.title)).toBe(toyListToPurchaseWithQuantity[i].quantity.toString());
-            await expect(await cartPage.getToySubTotal(toyListToPurchaseWithQuantity[i].toy.title)).toContain(toySubTotal.toString());
+            await expect(await CartPage.getToyQuantity(toyListToPurchaseWithQuantity[i].toy.title)).toBe(toyListToPurchaseWithQuantity[i].quantity.toString());
+            await expect(await CartPage.getToySubTotal(toyListToPurchaseWithQuantity[i].toy.title)).toContain(toySubTotal.toString());
         }
 
-        await expect(await cartPage.getTotalPrice()).toContain(totalPrice.toString());
-        let contactDetailsTab = await cartPage.clickCheckout();
+        await expect(await CartPage.getTotalPrice()).toContain(totalPrice.toString());
+        let contactDetailsTab = await CartPage.clickCheckout();
 
-        await contactDetailsTab.addContactDetails(contactDetail);
+        await contactDetailsTab.addContactDetails(contactDetails);
         await contactDetailsTab.clickNext();
 
-        await deliveryDetailsTab.addDeliveryDetails(deliveryDetail);
-        await deliveryDetailsTab.clickNext();
+        await DeliveryDetailsTab.addDeliveryDetails(deliveryDetails);
+        await DeliveryDetailsTab.clickNext();
         
-        await paymentDetailsTab.addPaymentDetails(paymentDetail);
-        await paymentDetailsTab.clickNext();
+        await PaymentDetailsTab.addPaymentDetails(paymentDetails);
+        await PaymentDetailsTab.clickNext();
 
-        await confirmOrderTab.clickExpandAll();
+        await ConfirmOrderTab.clickExpandAll();
         
         // Order Details section validation
-        await expect(await confirmOrderTab.getNumberOfCartItems()).toBe(toyListToPurchaseWithQuantity.length);
+        await expect(await ConfirmOrderTab.getNumberOfCartItems()).toBe(toyListToPurchaseWithQuantity.length);
         for (var i in toyListToPurchaseWithQuantity) {
             let toySubTotal : number = (toyListToPurchaseWithQuantity[i].toy.price === undefined ? Number(0) : Number(toyListToPurchaseWithQuantity[i].toy.price)) * toyListToPurchaseWithQuantity[i].quantity;
-            await expect(await confirmOrderTab.getCartItemUnitPrice(toyListToPurchaseWithQuantity[i].toy.title)).toContain(toyListToPurchaseWithQuantity[i].toy.price.toString());
-            await expect(await confirmOrderTab.getCartItemQuantity(toyListToPurchaseWithQuantity[i].toy.title)).toBe(toyListToPurchaseWithQuantity[i].quantity.toString());
-            await expect(await confirmOrderTab.getCartItemSubTotal(toyListToPurchaseWithQuantity[i].toy.title)).toContain(toySubTotal.toString());
+            await expect(await ConfirmOrderTab.getCartItemUnitPrice(toyListToPurchaseWithQuantity[i].toy.title)).toContain(toyListToPurchaseWithQuantity[i].toy.price.toString());
+            await expect(await ConfirmOrderTab.getCartItemQuantity(toyListToPurchaseWithQuantity[i].toy.title)).toBe(toyListToPurchaseWithQuantity[i].quantity.toString());
+            await expect(await ConfirmOrderTab.getCartItemSubTotal(toyListToPurchaseWithQuantity[i].toy.title)).toContain(toySubTotal.toString());
         }
 
         // Delivery & Contact Details section validation
         // Validating Contact Details
-        await expect(await confirmOrderTab.getContactName()).toBe(contactDetail.firstname + " " + contactDetail.lastname);
-        await expect(await confirmOrderTab.getContactEmailAddress()).toBe(contactDetail.email);
-        await expect((await confirmOrderTab.getContactNumber())).toContain(contactDetail.phoneNumber.toString());
-        await expect(await confirmOrderTab.getContactAddress()).toContain(contactDetail.addressline1);
-        if(contactDetail.addressline2.length > 0)
-            await expect(await confirmOrderTab.getContactAddress()).toContain(contactDetail.addressline2);
-        await expect(await confirmOrderTab.getContactAddress()).toContain(contactDetail.suburb);
-        await expect(await confirmOrderTab.getContactAddress()).toContain(contactDetail.state);
-        await expect(await confirmOrderTab.getContactAddress()).toContain(contactDetail.postcode.toString());
+        await expect(await ConfirmOrderTab.getContactName()).toBe(contactDetails.firstname + " " + contactDetails.lastname);
+        await expect(await ConfirmOrderTab.getContactEmailAddress()).toBe(contactDetails.email);
+        await expect((await ConfirmOrderTab.getContactNumber())).toContain(contactDetails.phoneNumber.toString());
+        await expect(await ConfirmOrderTab.getContactAddress()).toContain(contactDetails.addressline1);
+        if(contactDetails.addressline2.length > 0)
+            await expect(await ConfirmOrderTab.getContactAddress()).toContain(contactDetails.addressline2);
+        await expect(await ConfirmOrderTab.getContactAddress()).toContain(contactDetails.suburb);
+        await expect(await ConfirmOrderTab.getContactAddress()).toContain(contactDetails.state);
+        await expect(await ConfirmOrderTab.getContactAddress()).toContain(contactDetails.postcode.toString());
 
         // Validating Delivery Details
-        await expect(await confirmOrderTab.getDeliveryName()).toBe(deliveryDetail.name);
-        await expect(await confirmOrderTab.getDeliveryAddress()).toContain(deliveryDetail.addressline1);
-        if(deliveryDetail.addressline2.length > 0)
-            await expect(await confirmOrderTab.getDeliveryAddress()).toContain(deliveryDetail.addressline2);
-        await expect(await confirmOrderTab.getDeliveryAddress()).toContain(deliveryDetail.suburb);
-        await expect(await confirmOrderTab.getDeliveryAddress()).toContain(deliveryDetail.state);
-        await expect(await confirmOrderTab.getDeliveryAddress()).toContain(deliveryDetail.postcode.toString());
+        await expect(await ConfirmOrderTab.getDeliveryName()).toBe(deliveryDetails.name);
+        await expect(await ConfirmOrderTab.getDeliveryAddress()).toContain(deliveryDetails.addressline1);
+        if(deliveryDetails.addressline2.length > 0)
+            await expect(await ConfirmOrderTab.getDeliveryAddress()).toContain(deliveryDetails.addressline2);
+        await expect(await ConfirmOrderTab.getDeliveryAddress()).toContain(deliveryDetails.suburb);
+        await expect(await ConfirmOrderTab.getDeliveryAddress()).toContain(deliveryDetails.state);
+        await expect(await ConfirmOrderTab.getDeliveryAddress()).toContain(deliveryDetails.postcode.toString());
 
         // Payment Details section validation
-        await expect(await confirmOrderTab.getCardName()).toBe(paymentDetail.cardname);
-        await expect(await confirmOrderTab.getCardNumber()).toBe(paymentDetail.cardnumber.toString());
-        await expect(await confirmOrderTab.getCardType()).toBe(paymentDetail.cardtype);
-        await expect(await confirmOrderTab.getCardExpiry()).toBe(paymentDetail.expirydate);
-        await expect(await confirmOrderTab.getCardCVV()).toBe(paymentDetail.cvv.toString());
+        await expect(await ConfirmOrderTab.getCardName()).toBe(paymentDetails.cardname);
+        await expect(await ConfirmOrderTab.getCardNumber()).toBe(paymentDetails.cardnumber.toString());
+        await expect(await ConfirmOrderTab.getCardType()).toBe(paymentDetails.cardtype);
+        await expect(await ConfirmOrderTab.getCardExpiry()).toBe(paymentDetails.expirydate);
+        await expect(await ConfirmOrderTab.getCardCVV()).toBe(paymentDetails.cvv.toString());
         
-        let orderOutcomePage = await confirmOrderTab.clickSubmitOrder();
+        let orderOutcomePage = await ConfirmOrderTab.clickSubmitOrder();
 
         console.log("Payment Status => " + await orderOutcomePage.getPaymentStatus());
         console.log("Order Number => " + await orderOutcomePage.getPaymentStatus());
@@ -182,11 +155,11 @@ describe('Jupiter Toys API and UI testing', () => {
     it('Scenario 3 - Same contact address and delivery address THROUGH UI', async () => {
 
         //test data:
-        const contactDetail = new contactDetails("Shreesh", "Karthikeyan", "shreeshkarthikeyan30@gmail.com",
+        const contactDetails = new ContactDetails("Shreesh", "Karthikeyan", "shreeshkarthikeyan30@gmail.com",
             Number(61456314971), "2, Coppin Close", "", "Hampton Park", "VIC", Number(3976)
         );
 
-        const paymentDetail = new paymentDetails(Number(1234123412341234),
+        const paymentDetails = new PaymentDetails(Number(1234123412341234),
             "Mastercard", "Shreesh Karthikeyan", "12/26", Number(123)
         );
 
@@ -205,63 +178,63 @@ describe('Jupiter Toys API and UI testing', () => {
 
         for (var i in toyListToPurchaseWithQuantity) {
             let toySubTotal : number = (toyListToPurchaseWithQuantity[i].toy.price === undefined ? Number(0) : Number(toyListToPurchaseWithQuantity[i].toy.price)) * toyListToPurchaseWithQuantity[i].quantity;
-            await expect(await cartPage.getToyQuantity(toyListToPurchaseWithQuantity[i].toy.title)).toBe(toyListToPurchaseWithQuantity[i].quantity.toString());
-            await expect(await cartPage.getToySubTotal(toyListToPurchaseWithQuantity[i].toy.title)).toContain(toySubTotal.toString());
+            await expect(await CartPage.getToyQuantity(toyListToPurchaseWithQuantity[i].toy.title)).toBe(toyListToPurchaseWithQuantity[i].quantity.toString());
+            await expect(await CartPage.getToySubTotal(toyListToPurchaseWithQuantity[i].toy.title)).toContain(toySubTotal.toString());
         }
 
-        await expect(await cartPage.getTotalPrice()).toContain(totalPrice.toString());
-        let contactDetailsTab = await cartPage.clickCheckout();
+        await expect(await CartPage.getTotalPrice()).toContain(totalPrice.toString());
+        let contactDetailsTab = await CartPage.clickCheckout();
 
-        await contactDetailsTab.addContactDetails(contactDetail);
+        await contactDetailsTab.addContactDetails(contactDetails);
         await contactDetailsTab.clickNext();
 
-        await deliveryDetailsTab.selectSameAsContactAddress();
-        await deliveryDetailsTab.clickNext();
+        await DeliveryDetailsTab.selectSameAsContactAddress();
+        await DeliveryDetailsTab.clickNext();
         
-        await paymentDetailsTab.addPaymentDetails(paymentDetail);
-        await paymentDetailsTab.clickNext();
+        await PaymentDetailsTab.addPaymentDetails(paymentDetails);
+        await PaymentDetailsTab.clickNext();
 
-        await confirmOrderTab.clickExpandAll();
+        await ConfirmOrderTab.clickExpandAll();
         
         // Order Details section validation
-        await expect(await confirmOrderTab.getNumberOfCartItems()).toBe(toyListToPurchaseWithQuantity.length);
+        await expect(await ConfirmOrderTab.getNumberOfCartItems()).toBe(toyListToPurchaseWithQuantity.length);
         for (var i in toyListToPurchaseWithQuantity) {
             let toySubTotal : number = (toyListToPurchaseWithQuantity[i].toy.price === undefined ? Number(0) : Number(toyListToPurchaseWithQuantity[i].toy.price)) * toyListToPurchaseWithQuantity[i].quantity;
-            await expect(await confirmOrderTab.getCartItemUnitPrice(toyListToPurchaseWithQuantity[i].toy.title)).toContain(toyListToPurchaseWithQuantity[i].toy.price.toString());
-            await expect(await confirmOrderTab.getCartItemQuantity(toyListToPurchaseWithQuantity[i].toy.title)).toBe(toyListToPurchaseWithQuantity[i].quantity.toString());
-            await expect(await confirmOrderTab.getCartItemSubTotal(toyListToPurchaseWithQuantity[i].toy.title)).toContain(toySubTotal.toString());
+            await expect(await ConfirmOrderTab.getCartItemUnitPrice(toyListToPurchaseWithQuantity[i].toy.title)).toContain(toyListToPurchaseWithQuantity[i].toy.price.toString());
+            await expect(await ConfirmOrderTab.getCartItemQuantity(toyListToPurchaseWithQuantity[i].toy.title)).toBe(toyListToPurchaseWithQuantity[i].quantity.toString());
+            await expect(await ConfirmOrderTab.getCartItemSubTotal(toyListToPurchaseWithQuantity[i].toy.title)).toContain(toySubTotal.toString());
         }
 
         // Delivery & Contact Details section validation
         // Validating Contact Details
-        await expect(await confirmOrderTab.getContactName()).toBe(contactDetail.firstname + " " + contactDetail.lastname);
-        await expect(await confirmOrderTab.getContactEmailAddress()).toBe(contactDetail.email);
-        await expect((await confirmOrderTab.getContactNumber())).toContain(contactDetail.phoneNumber.toString());
-        await expect(await confirmOrderTab.getContactAddress()).toContain(contactDetail.addressline1);
-        if(contactDetail.addressline2.length > 0)
-            await expect(await confirmOrderTab.getContactAddress()).toContain(contactDetail.addressline2);
-        await expect(await confirmOrderTab.getContactAddress()).toContain(contactDetail.suburb);
-        await expect(await confirmOrderTab.getContactAddress()).toContain(contactDetail.state);
-        await expect(await confirmOrderTab.getContactAddress()).toContain(contactDetail.postcode.toString());
+        await expect(await ConfirmOrderTab.getContactName()).toBe(contactDetails.firstname + " " + contactDetails.lastname);
+        await expect(await ConfirmOrderTab.getContactEmailAddress()).toBe(contactDetails.email);
+        await expect((await ConfirmOrderTab.getContactNumber())).toContain(contactDetails.phoneNumber.toString());
+        await expect(await ConfirmOrderTab.getContactAddress()).toContain(contactDetails.addressline1);
+        if(contactDetails.addressline2.length > 0)
+            await expect(await ConfirmOrderTab.getContactAddress()).toContain(contactDetails.addressline2);
+        await expect(await ConfirmOrderTab.getContactAddress()).toContain(contactDetails.suburb);
+        await expect(await ConfirmOrderTab.getContactAddress()).toContain(contactDetails.state);
+        await expect(await ConfirmOrderTab.getContactAddress()).toContain(contactDetails.postcode.toString());
 
         // Validating Delivery Details
-        await expect(await confirmOrderTab.getDeliveryName()).toBe(contactDetail.firstname + " " + contactDetail.lastname);
-        await expect(await confirmOrderTab.getDeliveryAddress()).toContain(contactDetail.addressline1);
-        if(contactDetail.addressline2.length > 0)
-            await expect(await confirmOrderTab.getDeliveryAddress()).toContain(contactDetail.addressline2);
-        await expect(await confirmOrderTab.getDeliveryAddress()).toContain(contactDetail.suburb);
-        await expect(await confirmOrderTab.getDeliveryAddress()).toContain(contactDetail.state);
-        await expect(await confirmOrderTab.getDeliveryAddress()).toContain(contactDetail.postcode.toString());
+        await expect(await ConfirmOrderTab.getDeliveryName()).toBe(contactDetails.firstname + " " + contactDetails.lastname);
+        await expect(await ConfirmOrderTab.getDeliveryAddress()).toContain(contactDetails.addressline1);
+        if(contactDetails.addressline2.length > 0)
+            await expect(await ConfirmOrderTab.getDeliveryAddress()).toContain(contactDetails.addressline2);
+        await expect(await ConfirmOrderTab.getDeliveryAddress()).toContain(contactDetails.suburb);
+        await expect(await ConfirmOrderTab.getDeliveryAddress()).toContain(contactDetails.state);
+        await expect(await ConfirmOrderTab.getDeliveryAddress()).toContain(contactDetails.postcode.toString());
         
 
         // Payment Details section validation
-        await expect(await confirmOrderTab.getCardName()).toBe(paymentDetail.cardname);
-        await expect(await confirmOrderTab.getCardNumber()).toBe(paymentDetail.cardnumber.toString());
-        await expect(await confirmOrderTab.getCardType()).toBe(paymentDetail.cardtype);
-        await expect(await confirmOrderTab.getCardExpiry()).toBe(paymentDetail.expirydate);
-        await expect(await confirmOrderTab.getCardCVV()).toBe(paymentDetail.cvv.toString());
+        await expect(await ConfirmOrderTab.getCardName()).toBe(paymentDetails.cardname);
+        await expect(await ConfirmOrderTab.getCardNumber()).toBe(paymentDetails.cardnumber.toString());
+        await expect(await ConfirmOrderTab.getCardType()).toBe(paymentDetails.cardtype);
+        await expect(await ConfirmOrderTab.getCardExpiry()).toBe(paymentDetails.expirydate);
+        await expect(await ConfirmOrderTab.getCardCVV()).toBe(paymentDetails.cvv.toString());
         
-        let orderOutcomePage = await confirmOrderTab.clickSubmitOrder();
+        let orderOutcomePage = await ConfirmOrderTab.clickSubmitOrder();
 
         console.log("Payment Status => " + await orderOutcomePage.getPaymentStatus());
         console.log("Order Number => " + await orderOutcomePage.getOrderNumber());
@@ -269,7 +242,7 @@ describe('Jupiter Toys API and UI testing', () => {
 
     it('Scenario 4 - Verify purchasing a toy from a new customer account THROUGH API', async () => {
         //test data:
-        let addressApi : addressApi = {
+        let addressApi : AddressAPI = {
             id: 0,
             line1: "2, Coppin Close",
             line2: "",
@@ -281,34 +254,34 @@ describe('Jupiter Toys API and UI testing', () => {
         }
 
         //Create customer:
-        let customerId = await userAPIHandler.createCustomer(customerAPI);
+        let customerId = await UserAPIhandler.createCustomer(customerApi);
         console.log(customerId);
 
-        customerAPI.id = Number(customerId);
-        customerAPI.addresses = [addressApi]
+        customerApi.id = Number(customerId);
+        customerApi.addresses = [addressApi]
         //Update customer address:
-        let customerDetails = await userAPIHandler.updateCustomerAddress(customerId, customerAPI);
-        await expect(customerDetails.id).toBe(customerAPI.id);
-        await expect(customerDetails.username).toBe(customerAPI.username);
-        await expect(customerDetails.firstname).toBe(customerAPI.firstname);
-        await expect(customerDetails.lastname).toBe(customerAPI.lastname);
-        await expect(customerDetails.gender).toBe(customerAPI.gender);
-        await expect(customerDetails.phoneNumber).toBe(customerAPI.phoneNumber);
-        await expect(customerDetails.addresses.at(0)?.line1).toBe(customerAPI.addresses.at(0)?.line1);
-        await expect(customerDetails.addresses.at(0)?.line2).toBe(customerAPI.addresses.at(0)?.line2);
-        await expect(customerDetails.addresses.at(0)?.city).toBe(customerAPI.addresses.at(0)?.city);
-        await expect(customerDetails.addresses.at(0)?.postcode).toBe(customerAPI.addresses.at(0)?.postcode);
-        await expect(customerDetails.addresses.at(0)?.state).toBe(customerAPI.addresses.at(0)?.state);
-        await expect(customerDetails.addresses.at(0)?.addresstype).toBe(customerAPI.addresses.at(0)?.addresstype);
-        await expect(customerDetails.addresses.at(0)?.deliveryName).toBe(customerAPI.addresses.at(0)?.deliveryName);
+        let customerDetails = await UserAPIhandler.updateCustomerAddress(customerId, customerApi);
+        await expect(customerDetails.id).toBe(customerApi.id);
+        await expect(customerDetails.username).toBe(customerApi.username);
+        await expect(customerDetails.firstname).toBe(customerApi.firstname);
+        await expect(customerDetails.lastname).toBe(customerApi.lastname);
+        await expect(customerDetails.gender).toBe(customerApi.gender);
+        await expect(customerDetails.phoneNumber).toBe(customerApi.phoneNumber);
+        await expect(customerDetails.addresses.at(0)?.line1).toBe(customerApi.addresses.at(0)?.line1);
+        await expect(customerDetails.addresses.at(0)?.line2).toBe(customerApi.addresses.at(0)?.line2);
+        await expect(customerDetails.addresses.at(0)?.city).toBe(customerApi.addresses.at(0)?.city);
+        await expect(customerDetails.addresses.at(0)?.postcode).toBe(customerApi.addresses.at(0)?.postcode);
+        await expect(customerDetails.addresses.at(0)?.state).toBe(customerApi.addresses.at(0)?.state);
+        await expect(customerDetails.addresses.at(0)?.addresstype).toBe(customerApi.addresses.at(0)?.addresstype);
+        await expect(customerDetails.addresses.at(0)?.deliveryName).toBe(customerApi.addresses.at(0)?.deliveryName);
 
 
-        let transactionItemsList : transactionItemAPI[] = []
+        let transactionItemsList : TransactionItemAPI[] = []
 
         for (const purchasingToy of toyListToPurchaseWithQuantity) {
-            let transactionItem : transactionItemAPI = {
+            let transactionItem : TransactionItemAPI = {
                 id: 0,
-                toy: await toyAPIHandler.getToyById(purchasingToy.toy.id.toString()),
+                toy: await toyAPIhandler.getToyById(purchasingToy.toy.id.toString()),
                 numberOfToys: purchasingToy.quantity,
                 status: "OK"
             }
@@ -316,7 +289,7 @@ describe('Jupiter Toys API and UI testing', () => {
         };
         console.log(transactionItemsList);
 
-        let transactionHistory : transactionHistoryAPI = {
+        let transactionHistory : TransactionHistoryAPI = {
             id: 0,
             transactionItems: transactionItemsList,
             date: new Date().toLocaleDateString(),
@@ -326,7 +299,7 @@ describe('Jupiter Toys API and UI testing', () => {
         }
 
         //Add purchase to customer account:
-        let response = await userAPIHandler.addToysToCart(customerId, transactionHistory);
+        let response = await UserAPIhandler.addToysToCart(customerId, transactionHistory);
         console.log("Transaction ID: "+response.transaction_id);
         console.log("Order Number: "+response.order_number);
 
@@ -336,30 +309,30 @@ describe('Jupiter Toys API and UI testing', () => {
         let updatePaymentStatusData = {
             "paymentStatus" : "Successful",
         }
-        let updatePurchaseStatusResponse = await userAPIHandler.updatePurchaseStatus(transactionHistory.id.toString(), updatePaymentStatusData);
+        let updatePurchaseStatusResponse = await UserAPIhandler.updatePurchaseStatus(transactionHistory.id.toString(), updatePaymentStatusData);
         await expect(updatePurchaseStatusResponse.trim()).toBe("transaction updated successfully");
 
         transactionHistory.paymentStatus = updatePaymentStatusData.paymentStatus;
-        customerAPI.transactionHistory = [transactionHistory];
+        customerApi.transactionHistory = [transactionHistory];
         
     }),
 
     it('Scenario 5 - Verify deleting customer and toy THROUGH API', async () => {
 
         //Delete customer:
-        let deleteCustomerResponse = await userAPIHandler.deleteCustomer(customerAPI.id.toString());
+        let deleteCustomerResponse = await UserAPIhandler.deleteCustomer(customerApi.id.toString());
         await expect(deleteCustomerResponse).toBe(true);
         //Updates the toy's stock to zero:
         let updateToyStockData = {
             "stock" : 0
         }
         for (const purchasingToy of toyListToPurchaseWithQuantity) {
-            let updatedToy = await toyAPIHandler.updateToyStock(purchasingToy.toy.id.toString(), updateToyStockData);   
+            let updatedToy = await toyAPIhandler.updateToyStock(purchasingToy.toy.id.toString(), updateToyStockData);   
             await expect(updatedToy).toBe(updateToyStockData.stock);
         }
         //Deletes the toy:
         for (const purchasingToy of toyListToPurchaseWithQuantity) {
-            let deleteToyResponseMessage = await toyAPIHandler.deleteToy(purchasingToy.toy.id.toString());
+            let deleteToyResponseMessage = await toyAPIhandler.deleteToy(purchasingToy.toy.id.toString());
             await expect(deleteToyResponseMessage).toBe(`Toy with id ${purchasingToy.toy.id} deleted successfully`);
         }
     })

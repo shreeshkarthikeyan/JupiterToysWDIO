@@ -1,6 +1,7 @@
 import { expect } from '@wdio/globals'
-import { toyAPIHandler, userAPIHandler } from '../api/index.js'
-import { addressApi, toyApi, linkApi, customerApi, transactionHistoryAPI, transactionItemAPI } from '../data/interface/index.js'
+import toyAPIhandler from '../api/ToyAPIhandler.js'
+import UserAPIhandler from '../api/UserAPIhandler.js'
+import { AddressAPI, ToyAPI, CustomerAPI, TransactionItemAPI, TransactionHistoryAPI, LinkAPI } from '../data/interface/index.js';
 
 let toyId : string;
 let customerId : string;
@@ -9,7 +10,7 @@ describe('Jupiter Toys API testing', () => {
 
     it('Scenario 1 - Verify create and view toy', async () => {
         //test data:
-        let linkApi : linkApi = {
+        let linkApi : LinkAPI = {
             rel: "",
             href: "",
             hreflang: "",
@@ -21,7 +22,7 @@ describe('Jupiter Toys API testing', () => {
             name: ""
         }
     
-        let toyApi : toyApi = {
+        let toyApi : ToyAPI = {
             id: 0,
             price: 25.99,
             category: "Small",
@@ -33,12 +34,12 @@ describe('Jupiter Toys API testing', () => {
         }
 
         //Create toy:
-        toyId = await toyAPIHandler.createToy(toyApi);
+        toyId = await toyAPIhandler.createToy(toyApi);
         console.log(toyId);
 
         toyApi.id = Number(toyId);
         //Get toy:
-        let toyDetails = await toyAPIHandler.getToyById(toyId);
+        let toyDetails = await toyAPIhandler.getToyById(toyId);
         if(toyDetails === undefined)
             throw new Error("No such toy created");
       
@@ -52,7 +53,7 @@ describe('Jupiter Toys API testing', () => {
 
     it('Scenario 2 - Verify purchasing a toy from a new customer account', async () => {
         //test data:
-        let addressApi : addressApi = {
+        let addressApi : AddressAPI = {
             id: 0,
             line1: "2, Coppin Close",
             line2: "",
@@ -63,7 +64,7 @@ describe('Jupiter Toys API testing', () => {
             deliveryName: "Shreesh"
         }
 
-        let customerApi : customerApi = {
+        let customerApi : CustomerAPI = {
             id: 0,
             username: "Shreeshthikeyan30@gmail.com",
             firstname: "Shreesh",
@@ -75,13 +76,13 @@ describe('Jupiter Toys API testing', () => {
         }
 
         //Create customer:
-        customerId = await userAPIHandler.createCustomer(customerApi);
+        customerId = await UserAPIhandler.createCustomer(customerApi);
         console.log(customerId);
 
         customerApi.id = Number(customerId);
         customerApi.addresses = [addressApi]
         //Update customer address:
-        let customerDetails = await userAPIHandler.updateCustomerAddress(customerId, customerApi);
+        let customerDetails = await UserAPIhandler.updateCustomerAddress(customerId, customerApi);
         await expect(customerDetails.id).toBe(customerApi.id);
         await expect(customerDetails.username).toBe(customerApi.username);
         await expect(customerDetails?.firstname).toBe(customerApi.firstname);
@@ -97,16 +98,16 @@ describe('Jupiter Toys API testing', () => {
         await expect(customerDetails?.addresses.at(0)?.deliveryName).toBe(customerApi.addresses.at(0)?.deliveryName);
 
 
-        let transactionItemsList : transactionItemAPI[] = [
+        let transactionItemsList : TransactionItemAPI[] = [
             {
                 id: 0,
-                toy: await toyAPIHandler.getToyById(toyId),
+                toy: await toyAPIhandler.getToyById(toyId),
                 numberOfToys: 3,
                 status: "OK"
             }
         ]
 
-        let transactionHistory : transactionHistoryAPI = {
+        let transactionHistory : TransactionHistoryAPI = {
             id: 0,
             transactionItems: transactionItemsList,
             date: new Date().toLocaleDateString(),
@@ -116,7 +117,7 @@ describe('Jupiter Toys API testing', () => {
         }
 
         //Add purchase to customer account:
-        let response = await userAPIHandler.addToysToCart(customerId, transactionHistory);
+        let response = await UserAPIhandler.addToysToCart(customerId, transactionHistory);
         console.log("Transaction ID: "+response.transaction_id);
         console.log("Order Number: "+response.order_number);
 
@@ -126,7 +127,7 @@ describe('Jupiter Toys API testing', () => {
         let updatePaymentStatusData = {
             "paymentStatus" : "Successful",
         }
-        let updatePurchaseStatusResponse = await userAPIHandler.updatePurchaseStatus(transactionHistory.id.toString(), updatePaymentStatusData);
+        let updatePurchaseStatusResponse = await UserAPIhandler.updatePurchaseStatus(transactionHistory.id.toString(), updatePaymentStatusData);
         await expect(updatePurchaseStatusResponse.trim()).toBe("transaction updated successfully");
 
         transactionHistory.paymentStatus = updatePaymentStatusData.paymentStatus;
@@ -137,16 +138,16 @@ describe('Jupiter Toys API testing', () => {
     it('Scenario 3 - Verify deleting customer and toy', async () => {
 
         //Delete customer:
-        let deleteCustomerResponse = await userAPIHandler.deleteCustomer(customerId);
+        let deleteCustomerResponse = await UserAPIhandler.deleteCustomer(customerId);
         await expect(deleteCustomerResponse).toBe(true);
         //Updates the toy's stock to zero:
         let updateToyStockData = {
             "stock" : 0
         }
-        let updatedToy = await toyAPIHandler.updateToyStock(toyId, updateToyStockData);
+        let updatedToy = await toyAPIhandler.updateToyStock(toyId, updateToyStockData);
         await expect(updatedToy).toBe(updateToyStockData.stock);        
         //Deletes the toy:
-        let deleteToyResponseMessage = await toyAPIHandler.deleteToy(toyId);
+        let deleteToyResponseMessage = await toyAPIhandler.deleteToy(toyId);
         await expect(deleteToyResponseMessage).toBe(`Toy with id ${toyId} deleted successfully`);
     })
 

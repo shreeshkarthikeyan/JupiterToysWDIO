@@ -1,8 +1,8 @@
-import { toyApi } from "./index.js";
+import { ToyAPI } from "./index.js";
 
 export default interface TransactionItemAPI {
     id : number;
-    toy : toyApi;
+    toy : ToyAPI;
     numberOfToys : number;
     status : string;
 }

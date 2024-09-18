@@ -1,7 +1,7 @@
-import { contactDetails } from "../../data/index.js";
-import { checkoutPage } from "./index.js";
+import { ContactDetails } from "../../data/index.js";
+import CheckoutPage from "./CheckoutPage.js";
 
-class ContactDetailsTab extends checkoutPage {
+class ContactDetailsTab extends CheckoutPage {
     constructor() {
         super();
     }
@@ -42,7 +42,7 @@ class ContactDetailsTab extends checkoutPage {
         return this.activeTabContainer.$(".//input[@ng-reflect-name='postcode']");
     }
 
-    public async addContactDetails(contactDetails: contactDetails) : Promise<void> {
+    public async addContactDetails(contactDetails: ContactDetails) : Promise<void> {
         await this.enterValue(this.inputFirstName, contactDetails.firstname);
         await this.enterValue(this.inputLastName, contactDetails.lastname);
         await this.enterValue(this.inputEmail, contactDetails.email);

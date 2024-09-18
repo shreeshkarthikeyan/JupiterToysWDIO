@@ -1,4 +1,4 @@
-import { linkApi } from "./index.js";
+import { LinkAPI } from "./index.js";
 
 export default interface ToyAPI {
     id : number;
@@ -8,5 +8,5 @@ export default interface ToyAPI {
     size : string;
     image : string;
     stock : number;
-    links : linkApi[];
+    links : LinkAPI[];
 }

@@ -1,6 +1,6 @@
-import { basePage } from "../index.js";
+import Page from "../BasePage.js";
 
-export default class CheckOutPage extends basePage {
+export default class CheckOutPage extends Page {
  
     constructor() {
         super();

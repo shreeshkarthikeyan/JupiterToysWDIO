@@ -1,7 +1,7 @@
-import { deliveryDetails } from "../../data/index.js";
-import { checkoutPage } from "./index.js";
+import { DeliveryDetails } from "../../data/index.js";
+import CheckOutPage from "./CheckoutPage.js";
 
-class DeliveryDetailsTab extends checkoutPage {
+class DeliveryDetailsTab extends CheckOutPage {
 
     
     constructor() {
@@ -39,7 +39,7 @@ class DeliveryDetailsTab extends checkoutPage {
         return this.activeTabContainer.$(".//input[@ng-reflect-name='postcode']");
     }
 
-    public async addDeliveryDetails(deliveryDetails: deliveryDetails) : Promise<void> {
+    public async addDeliveryDetails(deliveryDetails: DeliveryDetails) : Promise<void> {
         await this.waitForActiveTabToBe("Delivery Details");
         await this.click(this.isNotSameAsContactAddress);
         await this.enterValue(this.inputName, deliveryDetails.name);

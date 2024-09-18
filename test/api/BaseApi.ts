@@ -1,15 +1,14 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { Agent } from "https";
-import { envs } from "../../wdio.conf.js";
 
 async function getToken() {
   console.log("I am into this main method");
-        let token = await axios.post(envs.tokenurl!, null, {
+        let token = await axios.post(process.env.tokenurl!, null, {
             params : {
-                "grant_type" : envs.grant_type!,
-                "scope" : envs.scope!,
-                "client_secret" : envs.client_secret!,
-                "client_id" : envs.client_id!
+                "grant_type" : process.env.grant_type!,
+                "scope" : process.env.scope!,
+                "client_secret" : process.env.client_secret!,
+                "client_id" : process.env.client_id!
             },
             headers : {
                 "Content-Type" : "application/x-www-form-urlencoded"

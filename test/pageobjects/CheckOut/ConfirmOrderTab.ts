@@ -1,6 +1,7 @@
-import { orderOutcomePage, checkoutPage } from "./index.js";
+import orderOutcome from "./OrderOutcomePage.js";
+import CheckOutPage from "./CheckoutPage.js";
 
-class ConfirmOrderTab extends checkoutPage {
+class ConfirmOrderTab extends CheckOutPage {
 
     
     constructor() {
@@ -109,7 +110,7 @@ class ConfirmOrderTab extends checkoutPage {
 
     public async clickSubmitOrder() : Promise<any> {
         await this.click(this.btnSubmitOrder);
-        return orderOutcomePage;
+        return orderOutcome;
     }
 }
 

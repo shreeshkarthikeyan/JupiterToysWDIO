@@ -1,12 +1,11 @@
-import { envs } from "../../wdio.conf.js";
-import { baseApi } from "./index.js";
-import { customerApi, transactionHistoryAPI } from "../data/interface/index.js";
+import { CustomerAPI, TransactionHistoryAPI } from "../data/interface/index.js";
+import BaseApi from "./BaseApi.js";
 
-const URL = envs.customerbaseurl!;
+const URL = process.env.customerbaseurl!;
 
-class UserAPIHandler extends baseApi {
+class UserAPIHandler extends BaseApi {
 
-    public async createCustomer(customerApi : customerApi) : Promise<string> {
+    public async createCustomer(customerApi : CustomerAPI) : Promise<string> {
         let response = await this.requests.post(`${URL}/customer`, customerApi);
 
         response = JSON.stringify(response);
@@ -14,8 +13,8 @@ class UserAPIHandler extends baseApi {
         return parsedResponse.id;
     }
 
-    public async updateCustomerAddress(customerId: string, customerApi : customerApi) : Promise<customerApi> {
-        let response = await this.requests.patch<customerApi>(`${URL}/customer/${customerId}`, customerApi)
+    public async updateCustomerAddress(customerId: string, customerApi : CustomerAPI) : Promise<CustomerAPI> {
+        let response = await this.requests.patch<CustomerAPI>(`${URL}/customer/${customerId}`, customerApi)
         
         if(!(response !== null && typeof response === 'object')) {
             throw new Error("Error in response");
@@ -24,7 +23,7 @@ class UserAPIHandler extends baseApi {
         return response;
     }
 
-    public async addToysToCart(customerId: string, toysAddToCart : transactionHistoryAPI) {
+    public async addToysToCart(customerId: string, toysAddToCart : TransactionHistoryAPI) {
         let response = await this.requests.put(`${URL}/customer/${customerId}/purchase`, toysAddToCart)
         
         response = JSON.stringify(response);

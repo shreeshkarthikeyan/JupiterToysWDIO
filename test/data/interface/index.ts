@@ -1,6 +1,6 @@
-export type { default as addressApi } from './AddressAPI.js'
-export type { default as customerApi } from './CustomerAPI.js'
-export type { default as linkApi } from './LinkAPI.js'
-export type { default as toyApi } from './ToyAPI.js'
-export type { default as transactionHistoryAPI } from './TransactionHistoryAPI.js'
-export type { default as transactionItemAPI } from './TransactionItemAPI.js'
+export type { default as AddressAPI } from "./AddressAPI.js"
+export type { default as CustomerAPI } from "./CustomerAPI.js"
+export type { default as LinkAPI } from "./LinkAPI.js"
+export type { default as ToyAPI } from "./ToyAPI.js"
+export type { default as  TransactionHistoryAPI } from "./TransactionHistoryAPI.js"
+export type { default as  TransactionItemAPI } from "./TransactionItemAPI.js"
