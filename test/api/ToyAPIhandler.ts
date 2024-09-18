@@ -1,11 +1,12 @@
-import { ToyAPI } from "../data/interface/ToyAPI.js";
-import BaseApi from "./BaseApi.js";
+import { envs } from "../../wdio.conf.js";
+import { baseApi } from "./index.js";
+import { toyApi } from "../data/interface/index.js";
 
-const URL = process.env.baseUrl!;
+const URL = envs.baseUrl!;
 
-class ToyAPIHandler extends BaseApi {
+class ToyAPIHandler extends baseApi {
 
-    public async createToy(toyApi : ToyAPI) : Promise<string> {
+    public async createToy(toyApi : toyApi) : Promise<string> {
         let response = await this.requests.post(URL, toyApi);
 
         response = JSON.stringify(response);
@@ -23,14 +24,14 @@ class ToyAPIHandler extends BaseApi {
     }
 
     public async updateToyStock(toyId : string, data : any) : Promise<number | undefined> {
-        let response = await this.requests.patch<ToyAPI>(`${URL}/${toyId}`, data);
+        let response = await this.requests.patch<toyApi>(`${URL}/${toyId}`, data);
 
         console.log("Stock count: "+response?.stock);
         return response?.stock;
     }
 
-    public async getToyById(toyId : string) : Promise<ToyAPI> {
-        let response = await this.requests.getAll<ToyAPI[]>(URL);
+    public async getToyById(toyId : string) : Promise<toyApi> {
+        let response = await this.requests.getAll<toyApi[]>(URL);
 
         if(!(response !== null && typeof response === 'object')) {
             throw new Error("Error in response");
@@ -44,7 +45,7 @@ class ToyAPIHandler extends BaseApi {
     }
 
     public async getToyByName(toyName : string) : Promise<any> {
-        let response = await this.requests.getAll<ToyAPI[]>(URL);
+        let response = await this.requests.getAll<toyApi[]>(URL);
 
         if(!(response !== null && typeof response === 'object')) {
             throw new Error("Error in response");

@@ -1,6 +1,6 @@
-import Page from "../BasePage.js"
+import { basePage } from "../index.js";
 
-class OrderOutcomePage extends Page {
+class OrderOutcomePage extends basePage {
 
     
     constructor() {

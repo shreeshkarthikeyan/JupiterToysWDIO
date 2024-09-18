@@ -1,4 +1,4 @@
-export class DeliveryDetails {
+export default class DeliveryDetails {
 
     constructor(
         public name : string,

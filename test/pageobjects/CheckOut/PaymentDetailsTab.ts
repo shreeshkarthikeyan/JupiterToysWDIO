@@ -1,7 +1,7 @@
-import { PaymentDetails } from "../../data/payment.details.js";
-import CheckOutPage from "./CheckoutPage.js";
+import { paymentDetails } from "../../data/index.js";
+import { checkoutPage } from "./index.js";
 
-class PaymentDetailsTab extends CheckOutPage {
+class PaymentDetailsTab extends checkoutPage {
 
     constructor() {
         super();
@@ -27,7 +27,7 @@ class PaymentDetailsTab extends CheckOutPage {
         return this.activeTabContainer.$(".//input[@ng-reflect-name='creditcardcvv']");
     }
 
-    public async addPaymentDetails(paymentDetails: PaymentDetails) : Promise<void> {
+    public async addPaymentDetails(paymentDetails: paymentDetails) : Promise<void> {
         await this.waitForActiveTabToBe("Payment Details");
         await this.enterValue(this.inputCreditCardNumber, paymentDetails.cardnumber);
         await this.selectOption(this.selectCreditCardType, paymentDetails.cardtype);

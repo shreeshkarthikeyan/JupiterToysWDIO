@@ -1,4 +1,4 @@
-export interface LinkAPI {
+export default interface LinkAPI {
     rel : string;
     href : string;
     hreflang : string;

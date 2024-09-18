@@ -1,4 +1,4 @@
-export interface AddressAPI {
+export default interface AddressAPI {
     id : number;
     line1 : string;
     line2 : string;

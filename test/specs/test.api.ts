@@ -1,12 +1,6 @@
 import { expect } from '@wdio/globals'
-import toyAPIhandler from '../api/ToyAPIhandler.js'
-import UserAPIhandler from '../api/UserAPIhandler.js'
-import { ToyAPI } from '../data/interface/ToyAPI.js'
-import { LinkAPI } from '../data/interface/LinkAPI.js'
-import { CustomerAPI } from '../data/interface/CustomerAPI.js'
-import { AddressAPI } from '../data/interface/AddressAPI.js'
-import { TransactionItemAPI } from '../data/interface/TransactionItemAPI.js'
-import { TransactionHistoryAPI } from '../data/interface/TransactionHistoryAPI.js'
+import { toyAPIHandler, userAPIHandler } from '../api/index.js'
+import { addressApi, toyApi, linkApi, customerApi, transactionHistoryAPI, transactionItemAPI } from '../data/interface/index.js'
 
 let toyId : string;
 let customerId : string;
@@ -15,7 +9,7 @@ describe('Jupiter Toys API testing', () => {
 
     it('Scenario 1 - Verify create and view toy', async () => {
         //test data:
-        let linkApi : LinkAPI = {
+        let linkApi : linkApi = {
             rel: "",
             href: "",
             hreflang: "",
@@ -27,7 +21,7 @@ describe('Jupiter Toys API testing', () => {
             name: ""
         }
     
-        let toyApi : ToyAPI = {
+        let toyApi : toyApi = {
             id: 0,
             price: 25.99,
             category: "Small",
@@ -39,12 +33,12 @@ describe('Jupiter Toys API testing', () => {
         }
 
         //Create toy:
-        toyId = await toyAPIhandler.createToy(toyApi);
+        toyId = await toyAPIHandler.createToy(toyApi);
         console.log(toyId);
 
         toyApi.id = Number(toyId);
         //Get toy:
-        let toyDetails = await toyAPIhandler.getToyById(toyId);
+        let toyDetails = await toyAPIHandler.getToyById(toyId);
         if(toyDetails === undefined)
             throw new Error("No such toy created");
       
@@ -58,7 +52,7 @@ describe('Jupiter Toys API testing', () => {
 
     it('Scenario 2 - Verify purchasing a toy from a new customer account', async () => {
         //test data:
-        let addressApi : AddressAPI = {
+        let addressApi : addressApi = {
             id: 0,
             line1: "2, Coppin Close",
             line2: "",
@@ -69,7 +63,7 @@ describe('Jupiter Toys API testing', () => {
             deliveryName: "Shreesh"
         }
 
-        let customerApi : CustomerAPI = {
+        let customerApi : customerApi = {
             id: 0,
             username: "Shreeshthikeyan30@gmail.com",
             firstname: "Shreesh",
@@ -81,13 +75,13 @@ describe('Jupiter Toys API testing', () => {
         }
 
         //Create customer:
-        customerId = await UserAPIhandler.createCustomer(customerApi);
+        customerId = await userAPIHandler.createCustomer(customerApi);
         console.log(customerId);
 
         customerApi.id = Number(customerId);
         customerApi.addresses = [addressApi]
         //Update customer address:
-        let customerDetails = await UserAPIhandler.updateCustomerAddress(customerId, customerApi);
+        let customerDetails = await userAPIHandler.updateCustomerAddress(customerId, customerApi);
         await expect(customerDetails.id).toBe(customerApi.id);
         await expect(customerDetails.username).toBe(customerApi.username);
         await expect(customerDetails?.firstname).toBe(customerApi.firstname);
@@ -103,16 +97,16 @@ describe('Jupiter Toys API testing', () => {
         await expect(customerDetails?.addresses.at(0)?.deliveryName).toBe(customerApi.addresses.at(0)?.deliveryName);
 
 
-        let transactionItemsList : TransactionItemAPI[] = [
+        let transactionItemsList : transactionItemAPI[] = [
             {
                 id: 0,
-                toy: await toyAPIhandler.getToyById(toyId),
+                toy: await toyAPIHandler.getToyById(toyId),
                 numberOfToys: 3,
                 status: "OK"
             }
         ]
 
-        let transactionHistory : TransactionHistoryAPI = {
+        let transactionHistory : transactionHistoryAPI = {
             id: 0,
             transactionItems: transactionItemsList,
             date: new Date().toLocaleDateString(),
@@ -122,7 +116,7 @@ describe('Jupiter Toys API testing', () => {
         }
 
         //Add purchase to customer account:
-        let response = await UserAPIhandler.addToysToCart(customerId, transactionHistory);
+        let response = await userAPIHandler.addToysToCart(customerId, transactionHistory);
         console.log("Transaction ID: "+response.transaction_id);
         console.log("Order Number: "+response.order_number);
 
@@ -132,7 +126,7 @@ describe('Jupiter Toys API testing', () => {
         let updatePaymentStatusData = {
             "paymentStatus" : "Successful",
         }
-        let updatePurchaseStatusResponse = await UserAPIhandler.updatePurchaseStatus(transactionHistory.id.toString(), updatePaymentStatusData);
+        let updatePurchaseStatusResponse = await userAPIHandler.updatePurchaseStatus(transactionHistory.id.toString(), updatePaymentStatusData);
         await expect(updatePurchaseStatusResponse.trim()).toBe("transaction updated successfully");
 
         transactionHistory.paymentStatus = updatePaymentStatusData.paymentStatus;
@@ -143,16 +137,16 @@ describe('Jupiter Toys API testing', () => {
     it('Scenario 3 - Verify deleting customer and toy', async () => {
 
         //Delete customer:
-        let deleteCustomerResponse = await UserAPIhandler.deleteCustomer(customerId);
+        let deleteCustomerResponse = await userAPIHandler.deleteCustomer(customerId);
         await expect(deleteCustomerResponse).toBe(true);
         //Updates the toy's stock to zero:
         let updateToyStockData = {
             "stock" : 0
         }
-        let updatedToy = await toyAPIhandler.updateToyStock(toyId, updateToyStockData);
+        let updatedToy = await toyAPIHandler.updateToyStock(toyId, updateToyStockData);
         await expect(updatedToy).toBe(updateToyStockData.stock);        
         //Deletes the toy:
-        let deleteToyResponseMessage = await toyAPIhandler.deleteToy(toyId);
+        let deleteToyResponseMessage = await toyAPIHandler.deleteToy(toyId);
         await expect(deleteToyResponseMessage).toBe(`Toy with id ${toyId} deleted successfully`);
     })
 

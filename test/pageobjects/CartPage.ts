@@ -1,7 +1,7 @@
-import contactDetailsForm from "./CheckOut/ContactDetailsTab.js";
-import Page from "./BasePage.js";
+import { contactDetailsTab } from "./CheckOut/index.js";
+import { basePage } from "./index.js";
 
-class CartPage extends Page {
+class CartPage extends basePage {
     
     constructor() {
         super();
@@ -47,7 +47,7 @@ class CartPage extends Page {
 
     public async clickCheckout() {
         await this.click(this.btnCheckOut);
-        return contactDetailsForm;
+        return contactDetailsTab;
     }
 }
 

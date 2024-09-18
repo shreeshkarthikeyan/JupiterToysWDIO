@@ -1,4 +1,4 @@
-export class ContactDetails {
+export default class ContactDetails {
 
     constructor ( 
         public firstname : string, 

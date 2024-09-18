@@ -2,10 +2,51 @@ import type { Options } from '@wdio/types'
 import * as dotnet from "dotenv";
 import * as path from 'path';
 
-const __dirname = path.resolve();
-dotnet.config({
-    path : `${__dirname}/test/.env`
-});
+// const __dirname = path.resolve();
+// dotnet.config({
+//    path : `${__dirname}/test/.env`
+// });
+type env = {
+    baseUrl : string | void,
+    customerbaseurl : string | void,
+    client_id: string | void,
+    client_secret: string | void,
+    scope: string | void,
+    grant_type: string | void,
+    tokenurl: string | void
+}
+export let envs : env = {
+    baseUrl: '',
+    customerbaseurl: '',
+    client_id: '',
+    client_secret: '',
+    scope: '',
+    grant_type: '',
+    tokenurl: ''
+};
+
+export function readEnvironmentVariables() {
+    const __dirname = path.resolve();
+          dotnet.config({
+              path : `${__dirname}/test/.env`
+          });
+          
+          const baseUrl = process.env.baseurl === undefined ? handleError("baseurl") : process.env.baseurl;
+          const customerbaseurl = process.env.customerbaseurl === undefined ? handleError("customerbaseurl") : process.env.customerbaseurl;
+          const client_id = process.env.client_id === undefined ? handleError("client_id") : process.env.client_id;
+          const client_secret = process.env.client_secret === undefined ? handleError("client_secret") : process.env.client_secret;
+          const scope = process.env.scope === undefined ? handleError("scope") : process.env.scope;
+          const grant_type = process.env.grant_type === undefined ? handleError("grant_type") : process.env.grant_type;
+          const tokenurl = process.env.tokenurl === undefined ? handleError("tokenurl") : process.env.tokenurl;
+  
+          return {
+              baseUrl, customerbaseurl, client_id, client_secret, scope, grant_type, tokenurl
+          };
+  }
+  
+  function handleError(envVariable : string) : void {
+      throw new Error(`No such '${envVariable}' variable present in the env file`);
+  }
 
 export const config: Options.Testrunner = {
     //
@@ -207,8 +248,9 @@ export const config: Options.Testrunner = {
      * @param {Array.<String>} specs List of spec file paths that are to be run
      * @param {string} cid worker id (e.g. 0-0)
      */
-    // beforeSession: function (config, capabilities, specs, cid) {
-    // },
+     beforeSession: function (config, capabilities, specs, cid) {
+        envs = readEnvironmentVariables();
+    },
     /**
      * Gets executed before test execution begins. At this point you can access to all global
      * variables like `browser`. It is the perfect place to define custom commands.
@@ -235,7 +277,7 @@ export const config: Options.Testrunner = {
      * Function to be executed before a test (in Mocha/Jasmine) starts.
      */
      beforeTest: function (test, context) {
-        browser.url(this.baseUrl === undefined ? "" : this.baseUrl);
+        //browser.url(this.baseUrl === undefined ? "" : this.baseUrl);
      },
     /**
      * Hook that gets executed _before_ a hook within the suite starts (e.g. runs before calling

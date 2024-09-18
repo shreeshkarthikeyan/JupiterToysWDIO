@@ -1,8 +1,8 @@
-import { TransactionItemAPI } from "./TransactionItemAPI.js";
+import { transactionItemAPI } from "./index.js";
 
-export interface TransactionHistoryAPI {
+export default interface TransactionHistoryAPI {
     id : number;
-    transactionItems : TransactionItemAPI[];
+    transactionItems : transactionItemAPI[];
     date : string;
     cost : number;
     paymentStatus : string;

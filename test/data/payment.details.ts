@@ -1,4 +1,4 @@
-export class PaymentDetails {
+export default class PaymentDetails {
 
     constructor (
         public cardnumber : number,
