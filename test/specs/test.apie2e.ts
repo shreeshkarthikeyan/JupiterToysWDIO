@@ -5,20 +5,10 @@ import CartPage from '../pageobjects/CartPage.js'
 import homePage from '../pageobjects/HomePage.js'
 import shopPage from '../pageobjects/ShopPage.js'
 import testdata from "../resources/test-data.json" assert { type: "json" };
-import { AddressAPI, ToyAPI, CustomerAPI, TransactionItemAPI, TransactionHistoryAPI } from '../data/interface/index.js';
+import { AddressAPI, ToyAPI, TransactionItemAPI, TransactionHistoryAPI } from '../data/interface/index.js';
 import { ContactDetails, DeliveryDetails, PaymentDetails } from "../data/index.js";
 import { ConfirmOrderTab, DeliveryDetailsTab, PaymentDetailsTab } from "../pageobjects/CheckOut/index.js"
-
-let customerApi : CustomerAPI = {
-    id: 0,
-    username: "Shreeshthikeyan30@gmail.com",
-    firstname: "Shreesh",
-    lastname: "Karthikeyan",
-    gender: "Male",
-    phoneNumber: "0456314971",
-    addresses: [],
-    transactionHistory: [],
-}
+import { customerApi } from '../data/interface/CustomerAPI.js'
 
 interface ToyToPurchaseWithQuantity {
     toy : ToyAPI,
@@ -38,9 +28,12 @@ describe('Jupiter Toys API and UI testing', () => {
                 quantity : 2 // Defaults to buy only 2
             });
         };
+        console.log(toyListToPurchaseWithQuantity);
     })
 
     it('Scenario 1 - Verify create and view toy THROUGH API', async () => {
+
+        //console.log("Hi I am in this it block");
 
         for (const purchasingToy of toyListToPurchaseWithQuantity) {
             //Create toy:
@@ -63,18 +56,9 @@ describe('Jupiter Toys API and UI testing', () => {
     }),
 
     it('Scenario 2 - Different contact address and delivery address THROUGH UI', async () => {
-        //test data:
-        const contactDetails = new ContactDetails("Shreesh", "Karthikeyan", "shreeshkarthikeyan30@gmail.com",
-            Number(61456314971), "2, Coppin Close", "", "Hampton Park", "VIC", Number(3976)
-        );
-
-        const deliveryDetails = new DeliveryDetails("Student Housing Accomodation",
-            "Unit 201, 2 Eastern Place", "", "Hawthorn East", "VIC", Number(3123)
-        );
-
-        const paymentDetails = new PaymentDetails(Number(1234123412341234),
-            "Mastercard", "Shreesh Karthikeyan", "12/26", Number(123)
-        );
+        const contactDetails = new ContactDetails();
+        const deliveryDetails = new DeliveryDetails();
+        const paymentDetails = new PaymentDetails();
         
         await homePage.clickShop();
         for (var i in toyListToPurchaseWithQuantity) {
@@ -153,18 +137,10 @@ describe('Jupiter Toys API and UI testing', () => {
     }),
 
     it('Scenario 3 - Same contact address and delivery address THROUGH UI', async () => {
-
-        //test data:
-        const contactDetails = new ContactDetails("Shreesh", "Karthikeyan", "shreeshkarthikeyan30@gmail.com",
-            Number(61456314971), "2, Coppin Close", "", "Hampton Park", "VIC", Number(3976)
-        );
-
-        const paymentDetails = new PaymentDetails(Number(1234123412341234),
-            "Mastercard", "Shreesh Karthikeyan", "12/26", Number(123)
-        );
+        const contactDetails = new ContactDetails();
+        const paymentDetails = new PaymentDetails();
 
         homePage.clickShop();
-
         for (var i in toyListToPurchaseWithQuantity) {
             console.log("Toy's name: " + toyListToPurchaseWithQuantity[i].toy.title + " , Quantity: "+ toyListToPurchaseWithQuantity[i].quantity);
             await shopPage.addToy(toyListToPurchaseWithQuantity[i].toy.title, toyListToPurchaseWithQuantity[i].quantity);
